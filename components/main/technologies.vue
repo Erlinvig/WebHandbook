@@ -73,6 +73,7 @@
   }
 
   &__left, &__right {
+    font-size: 23px;
     display: flex;
     justify-content: center;
     align-self: center;
@@ -87,6 +88,40 @@
   }
   &__right {
     margin-right: 0;
+  }
+}
+
+@media (min-width: 1280px) {
+
+}
+
+@media (min-width: 992px) and (max-width: 1279px) {
+
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .technologies__item {
+    min-width: 31.4%;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .technologies__item {
+    min-width: 48%;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 479px) {
+  .technologies__item {
+    min-width: 90%;
+    margin: 0 5%;
+  }
+}
+
+@media (max-width: 319px) {
+  .technologies__item {
+    min-width: 90%;
+    margin: 0 5%;
   }
 }
 </style>

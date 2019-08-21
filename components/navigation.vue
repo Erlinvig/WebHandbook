@@ -17,7 +17,7 @@
 <style lang="scss" scoped>
   .wrapper {
     background-color: #170c2b;
-    padding: 1.7em;
+    padding: 1.7em 0;
 
     .navigation {
       display: flex;
