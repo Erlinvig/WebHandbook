@@ -26,7 +26,8 @@ module.exports = {
     'normalize.css/normalize.css',
     '@/theme/reset.css',
     '@/theme/main.scss',
-    '@/theme/adaptive.scss'
+    '@/theme/adaptive.scss',
+    'element-ui/lib/theme-chalk/index.css',
   ],
   /*
   ** Plugins to load before mounting the App
@@ -58,6 +59,7 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+    transpile: [/^element-ui/],
     extend (config, ctx) {
     }
   }
