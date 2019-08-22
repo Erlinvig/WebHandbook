@@ -1,17 +1,17 @@
 <template lang="pug">
   .page
     technologies
-
+    technology-content
 </template>
 
 <script>
-import navigation from '~/components/navigation.vue'
 import technologies from '~/components/main/technologies.vue'
+import TechnologyContent from '~/components/main/content.vue'
 
 export default {
   components: {
-    navigation,
-    technologies
+    technologies,
+    TechnologyContent
   }
 }
 </script>
