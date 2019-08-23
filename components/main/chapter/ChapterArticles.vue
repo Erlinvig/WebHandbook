@@ -1,8 +1,9 @@
 <template lang="pug">
-  main
+  main(v-if="windowWidth")
     .row(v-for="(row, index) in getRows" :key="index")
       nuxt-link.row__item(v-for="(item, index) in row" :key="index" to="/")
         span {{item.title}}
+      .row__item.empty(v-if="row.length < countColumn")
 
 </template>
 
@@ -43,16 +44,16 @@
     },
     computed: {
       getRows() {
-        let countColumn = null;
+        this.countColumn = null;
         if (this.windowWidth >= 992) {
-          countColumn = 3;
+          this.countColumn = 3;
         } else if(this.windowWidth < 992 && this.windowWidth >= 480) {
-          countColumn = 2
+          this.countColumn = 2
         } else if (this.windowWidth < 480) {
-          countColumn = 1
+          this.countColumn = 1
         }
 
-        return this.listToRows(countColumn);
+        return this.listToRows(this.countColumn);
       }
     },
 
@@ -87,6 +88,9 @@
         &:hover {
           box-shadow: 0 0 8px rgba(0,0,0,0.45);
         }
+      }
+      .empty {
+        opacity: 0;
       }
     }
   }

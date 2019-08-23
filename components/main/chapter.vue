@@ -12,6 +12,20 @@
     components: {
       ChapterTitle,
       ChapterArticles
+    },
+    data() {
+      return {
+        windowWidth: null
+      }
+    },
+    methods: {
+      getWindowWidth(event) {
+        this.windowWidth = document.documentElement.clientWidth;
+      }
+    },
+    mounted() {
+      window.addEventListener('resize', this.getWindowWidth);
+      this.getWindowWidth();
     }
   }
 </script>

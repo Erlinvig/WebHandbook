@@ -7,7 +7,7 @@
         li.technologies__main
           ul.technologies__list
             li.technologies__item(
-              v-for="(technology, index) in technologies"
+              v-for="(technology, index) in getTechnologies"
               :key="index"
             ) {{technology.title}}
         li.technologies__right(@click="next")
@@ -33,6 +33,11 @@
       },
       previous() {
 
+      }
+    },
+    computed: {
+      getTechnologies() {
+        return this.$store.getters['content/getTechnologies']
       }
     }
   }
