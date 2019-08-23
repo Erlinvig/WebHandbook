@@ -5,7 +5,7 @@
         li.technologies__left(@click="previous")
           i(class="el-icon-arrow-left")
         li.technologies__main
-          ul.technologies__list
+          ul.technologies__list(:style="{transform: `translateX(${animatedPosition}%)`}")
             li.technologies__item(
               v-for="(technology, index) in getTechnologies"
               :key="index"
@@ -15,9 +15,15 @@
 </template>
 
 <script>
+  import {TweenLite} from "gsap/TweenMax";
+
   export default {
     data() {
       return {
+        windowWidth: null,
+        coefficientTranslate: 25,
+        position: 0,
+        tweenedPosition: 0,
         technologies: [
           {title: 'HTML'},
           {title: 'CSS'},
@@ -29,16 +35,42 @@
     },
     methods: {
       next() {
-
+        this.position -= 1;
       },
       previous() {
-
+        this.position += 1;
+      },
+      getWindowWidth(event) {
+        this.windowWidth = document.documentElement.clientWidth;
       }
     },
     computed: {
+      animatedPosition() {
+        return this.tweenedPosition * this.getCoefficientTranslate;
+      },
       getTechnologies() {
         return this.$store.getters['content/getTechnologies']
+      },
+      getCoefficientTranslate() {
+        if (this.windowWidth >= 992) {
+          this.coefficientTranslate = 25;
+        } else if(this.windowWidth < 992 && this.windowWidth >= 480) {
+          this.coefficientTranslate = 33.5;
+        } else if (this.windowWidth < 480) {
+          this.coefficientTranslate = 100;
+        }
+
+        return this.coefficientTranslate;
       }
+    },
+    watch: {
+      position: function(newValue) {
+        TweenLite.to(this.$data, 0.35, { tweenedPosition: newValue });
+      }
+    },
+    mounted() {
+      window.addEventListener('resize', this.getWindowWidth);
+      this.getWindowWidth();
     }
   }
 </script>
