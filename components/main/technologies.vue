@@ -1,11 +1,12 @@
 <template lang="pug">
   .wrapper
+    .v {{getCoefficientTranslate}}
     .container
       ul.technologies
         li.technologies__left(@click="previous")
           i(class="el-icon-arrow-left")
         li.technologies__main
-          ul.technologies__list(:style="{transform: `translateX(${animatedPosition}%)`}")
+          ul.technologies__list(:style="{transform: `translateX(${position}%)`}")
             li.technologies__item(
               v-for="(technology, index) in getTechnologies"
               :key="index"
@@ -15,13 +16,12 @@
 </template>
 
 <script>
-  import {TweenLite} from "gsap/TweenMax";
+  // import {TweenLite} from "gsap/TweenMax";
 
   export default {
     data() {
       return {
-        windowWidth: null,
-        coefficientTranslate: 25,
+        coefficientTranslate: null,
         position: 0,
         tweenedPosition: 0,
         technologies: [
@@ -35,28 +35,36 @@
     },
     methods: {
       next() {
-        this.position -= 1;
+        this.position -= this.coefficientTranslate;
       },
       previous() {
-        this.position += 1;
-      },
-      getWindowWidth(event) {
-        this.windowWidth = document.documentElement.clientWidth;
+        this.position += this.coefficientTranslate;
       }
     },
     computed: {
+      isStart() {
+        return this.position === 0
+      },
+      isEnd() {
+        return this.position === -this.technologies.length
+      },
       animatedPosition() {
         return this.tweenedPosition * this.getCoefficientTranslate;
       },
       getTechnologies() {
         return this.$store.getters['content/getTechnologies']
       },
+      getCoefficientAdaptive() {
+        return this.$store.getters['adaptive/getCoefficientAdaptive'];
+      },
       getCoefficientTranslate() {
-        if (this.windowWidth >= 992) {
+        if (this.getCoefficientAdaptive === 6 || this.getCoefficientAdaptive === 5) {
           this.coefficientTranslate = 25;
-        } else if(this.windowWidth < 992 && this.windowWidth >= 480) {
+        } else if(this.getCoefficientAdaptive === 4) {
           this.coefficientTranslate = 33.5;
-        } else if (this.windowWidth < 480) {
+        } else if(this.getCoefficientAdaptive === 3) {
+          this.coefficientTranslate = 50;
+        } else if (this.getCoefficientAdaptive === 2 || this.getCoefficientAdaptive === 1) {
           this.coefficientTranslate = 100;
         }
 
@@ -65,12 +73,8 @@
     },
     watch: {
       position: function(newValue) {
-        TweenLite.to(this.$data, 0.35, { tweenedPosition: newValue });
+        // TweenLite.to(this.$data, 0.35, { tweenedPosition: newValue });
       }
-    },
-    mounted() {
-      window.addEventListener('resize', this.getWindowWidth);
-      this.getWindowWidth();
     }
   }
 </script>

@@ -9,6 +9,21 @@
   export default {
     components: {
       navigation
+    },
+    data() {
+      return {
+        windowWidth: null
+      }
+    },
+    methods: {
+      getWindowWidth(event) {
+        this.windowWidth = document.documentElement.clientWidth;
+        this.$store.dispatch('adaptive/setOptions', {widthWindow: document.documentElement.clientWidth})
+      }
+    },
+    mounted() {
+      window.addEventListener('resize', this.getWindowWidth);
+      this.getWindowWidth();
     }
   }
 </script>

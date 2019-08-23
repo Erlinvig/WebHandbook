@@ -1,5 +1,5 @@
 <template lang="pug">
-  main(v-if="windowWidth")
+  main
     .row(v-for="(row, index) in getRows" :key="index")
       nuxt-link.row__item(v-for="(item, index) in row" :key="index" to="/")
         span {{item.title}}
@@ -12,7 +12,6 @@
     data() {
       return {
         countColumn: null,
-        windowWidth: null,
         elements: [
           {title: 'Статья 1'},
           {title: 'Статья 2'},
@@ -37,29 +36,26 @@
             rowsResult[rowsResult.length - 1].push(item)
         });
         return rowsResult
-      },
-      getWindowWidth(event) {
-        this.windowWidth = document.documentElement.clientWidth;
       }
     },
     computed: {
+      getCoefficientAdaptive() {
+        return this.$store.getters['adaptive/getCoefficientAdaptive'];
+      },
       getRows() {
-        this.countColumn = null;
-        if (this.windowWidth >= 992) {
-          this.countColumn = 3;
-        } else if(this.windowWidth < 992 && this.windowWidth >= 480) {
-          this.countColumn = 2
-        } else if (this.windowWidth < 480) {
-          this.countColumn = 1
+        if (this.getCoefficientAdaptive) {
+          this.countColumn = null;
+          if (this.getCoefficientAdaptive === 6 || this.getCoefficientAdaptive === 5) {
+            this.countColumn = 3;
+          } else if(this.getCoefficientAdaptive === 4 || this.getCoefficientAdaptive === 3) {
+            this.countColumn = 2
+          } else if (this.getCoefficientAdaptive === 2 || this.getCoefficientAdaptive === 1) {
+            this.countColumn = 1
+          }
+
+          return this.listToRows(this.countColumn);
         }
-
-        return this.listToRows(this.countColumn);
       }
-    },
-
-    mounted() {
-      window.addEventListener('resize', this.getWindowWidth);
-      this.getWindowWidth();
     }
   }
 </script>
