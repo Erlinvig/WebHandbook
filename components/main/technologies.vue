@@ -1,27 +1,27 @@
 <template lang="pug">
   .wrapper
-    .v {{getCoefficientTranslate}}
     .container
       ul.technologies
         li.technologies__left(@click="previous")
-          i(class="el-icon-arrow-left")
+          i(class="el-icon-arrow-left" :class="{'technologies__left--active': !isStart}")
         li.technologies__main
-          ul.technologies__list(:style="{transform: `translateX(${position}%)`}")
+          ul.technologies__list(:style="{transform: `translateX(${animatedPosition}%)`}")
             li.technologies__item(
               v-for="(technology, index) in getTechnologies"
               :key="index"
             ) {{technology.title}}
         li.technologies__right(@click="next")
-          i(class="el-icon-arrow-right")
+          i(class="el-icon-arrow-right" :class="{'technologies__right--active': !isEnd}")
 </template>
 
 <script>
-  // import {TweenLite} from "gsap/TweenMax";
+  import {TweenLite} from "gsap";
 
   export default {
     data() {
       return {
         coefficientTranslate: null,
+        countTechnologiesDisplayed: null,
         position: 0,
         tweenedPosition: 0,
         technologies: [
@@ -35,18 +35,22 @@
     },
     methods: {
       next() {
-        this.position -= this.coefficientTranslate;
+        if (!this.isEnd) {
+          this.position -= 1;
+        }
       },
       previous() {
-        this.position += this.coefficientTranslate;
+        if (!this.isStart) {
+          this.position += 1;
+        }
       }
     },
     computed: {
       isStart() {
-        return this.position === 0
+        return this.position >= 0
       },
       isEnd() {
-        return this.position === -this.technologies.length
+        return this.position <= -(this.technologies.length - this.countTechnologiesDisplayed)
       },
       animatedPosition() {
         return this.tweenedPosition * this.getCoefficientTranslate;
@@ -60,12 +64,16 @@
       getCoefficientTranslate() {
         if (this.getCoefficientAdaptive === 6 || this.getCoefficientAdaptive === 5) {
           this.coefficientTranslate = 25;
+          this.countTechnologiesDisplayed = 4;
         } else if(this.getCoefficientAdaptive === 4) {
           this.coefficientTranslate = 33.5;
+          this.countTechnologiesDisplayed = 3;
         } else if(this.getCoefficientAdaptive === 3) {
           this.coefficientTranslate = 50;
+          this.countTechnologiesDisplayed = 2;
         } else if (this.getCoefficientAdaptive === 2 || this.getCoefficientAdaptive === 1) {
           this.coefficientTranslate = 100;
+          this.countTechnologiesDisplayed = 1;
         }
 
         return this.coefficientTranslate;
@@ -73,7 +81,7 @@
     },
     watch: {
       position: function(newValue) {
-        // TweenLite.to(this.$data, 0.35, { tweenedPosition: newValue });
+        TweenLite.to(this.$data, 0.35, { tweenedPosition: newValue });
       }
     }
   }
@@ -100,20 +108,25 @@
     cursor: pointer;
     padding: 1em 0;
     background-color: #fff;
-    color: #050619;
     font-size: 22px;
     font-weight: 700;
     border-radius: 5px;
     margin: 0 1%;
   }
 
+  &__left--active, &__right--active {
+    color: #050619;
+  }
+
   &__item {
+    color: #050619;
     min-width: 23%;
     display: flex;
     justify-content: center;
   }
 
   &__left, &__right {
+    color: #c8c8c8;
     font-size: 23px;
     display: flex;
     justify-content: center;
