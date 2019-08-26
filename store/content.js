@@ -1,4 +1,5 @@
 import {temporary} from './temporaryData'
+const axios = require("axios");
 
 export const state = () => ({
   technologies: temporary
