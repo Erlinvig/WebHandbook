@@ -1,5 +1,4 @@
 import {temporary} from './temporaryData'
-const axios = require("axios");
 
 export const state = () => ({
   technologies: temporary
@@ -8,7 +7,18 @@ export const state = () => ({
 export const actions = {
   async getTechnologies({commit, state}) {
     // console.log(state.technologies)
-    return await state.technologies
+
+    const result = await this.$axios.$post('/graphql', {
+      query: `
+        query {
+          technologies {
+            _id
+            title
+          }
+        }
+      `
+    });
+    return result.data.technologies
   }
 };
 

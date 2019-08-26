@@ -7,7 +7,7 @@
         li.technologies__main
           ul.technologies__list(:style="{transform: `translateX(${animatedPosition}%)`}")
             li.technologies__item(
-              v-for="(technology, index) in getTechnologies"
+              v-for="(technology, index) in technologies"
               :key="index"
             ) {{technology.title}}
         li.technologies__right(@click="next")
@@ -18,19 +18,16 @@
   import {TweenLite} from "gsap";
 
   export default {
+    async mounted() {
+      this.technologies = await this.$store.dispatch('content/getTechnologies');
+    },
     data() {
       return {
         coefficientTranslate: null,
         countTechnologiesDisplayed: null,
         position: 0,
         tweenedPosition: 0,
-        technologies: [
-          {title: 'HTML'},
-          {title: 'CSS'},
-          {title: 'JavaScript'},
-          {title: 'NodeJS'},
-          {title: 'TypeScript'}
-        ]
+        technologies: []
       }
     },
     methods: {
@@ -55,9 +52,9 @@
       animatedPosition() {
         return this.tweenedPosition * this.getCoefficientTranslate;
       },
-      getTechnologies() {
-        return this.$store.getters['content/getTechnologies']
-      },
+      // getTechnologies() {
+      //   return this.$store.getters['content/getTechnologies']
+      // },
       getCoefficientAdaptive() {
         return this.$store.getters['adaptive/getCoefficientAdaptive'];
       },
