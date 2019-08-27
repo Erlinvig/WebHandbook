@@ -19,5 +19,12 @@ module.exports = {
     } catch (e) {
       throw e
     }
+  },
+  removeTechnology: async args => {
+    try {
+      await Technology.deleteOne({_id: args.technologyInput._id});
+    } catch (e) {
+      throw e
+    }
   }
 };
