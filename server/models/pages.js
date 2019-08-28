@@ -9,9 +9,13 @@ const pageSchema = new Schema({
   },
   content: {
     type: String,
-    required: true
+    default: 'Content'
   },
   chapterID: {
+    type: Schema.Types.ObjectId,
+    ref: 'Chapter'
+  },
+  technologyID: {
     type: Schema.Types.ObjectId,
     ref: 'Chapter'
   }

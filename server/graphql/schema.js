@@ -4,7 +4,9 @@ module.exports = buildSchema(`
   type Page {
     _id: ID!
     title: String!
-    content: String!
+    chapterID: String!
+    technologyID: String!
+    content: String
   }
   type Chapter {
     _id: ID!
