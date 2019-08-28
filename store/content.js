@@ -6,8 +6,6 @@ export const state = () => ({
 
 export const actions = {
   async getTechnologies({commit, state}) {
-    // console.log(state.technologies)
-
     const result = await this.$axios.$post('/graphql', {
       query: `
         query {
@@ -19,6 +17,29 @@ export const actions = {
       `
     });
     return result.data.technologies
+  },
+
+  async getTechnologyById({}, payload) {
+    const query = `
+        query {
+          technologies(technologyInput: {_id: "${payload.id}"}) {
+            _id
+            title
+            chapters {
+              _id
+              title
+              pages {
+                _id
+                title
+              }
+            }
+          }
+        }
+      `;
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+    return result.data.technologies[0]
   }
 };
 

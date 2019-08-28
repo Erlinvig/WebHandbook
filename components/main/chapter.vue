@@ -1,7 +1,7 @@
 <template lang="pug">
   .wrapper
-    chapter-title
-    chapter-articles
+    chapter-title(:chapter="chapter")
+    chapter-articles(:chapter="chapter")
 </template>
 
 <script>
@@ -12,7 +12,9 @@
     components: {
       ChapterTitle,
       ChapterArticles
-    }
+    },
+    props: ['chapter']
+
   }
 </script>
 

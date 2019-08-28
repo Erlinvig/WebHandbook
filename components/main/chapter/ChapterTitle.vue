@@ -3,9 +3,15 @@
     .line
     .title
       i.el-icon-caret-right
-      h1 Асинхронность в JavaScript
+      h1() {{chapter.title}}
     .line
 </template>
+
+<script>
+  export default {
+    props: ['chapter']
+  }
+</script>
 
 <style lang="scss" scoped>
   header {

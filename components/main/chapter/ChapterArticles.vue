@@ -9,28 +9,20 @@
 
 <script>
   export default {
+    props: ['chapter'],
+    mounted() {
+      this.pages = this.chapter.pages
+    },
     data() {
       return {
         countColumn: null,
-        elements: [
-          {title: 'Статья 1'},
-          {title: 'Статья 2'},
-          {title: 'Статья 3'},
-          {title: 'Статья 4'},
-          {title: 'Статья 5'},
-          {title: 'Статья 6'},
-          {title: 'Статья 7'},
-          {title: 'Статья 8'},
-          {title: 'Статья 9'},
-          {title: 'Статья 10'},
-          {title: 'Статья 11'},
-        ]
+        pages: []
       }
     },
     methods: {
       listToRows(countColumn) {
         let rowsResult = [];
-        this.elements.forEach((item, index) => {
+        this.pages.forEach((item, index) => {
           index % countColumn === 0 ?
             rowsResult.push([item]) :
             rowsResult[rowsResult.length - 1].push(item)
