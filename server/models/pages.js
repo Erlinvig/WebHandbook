@@ -10,6 +10,10 @@ const pageSchema = new Schema({
   content: {
     type: String,
     required: true
+  },
+  chapterID: {
+    type: Schema.Types.ObjectId,
+    ref: 'Chapter'
   }
 });
 

@@ -4,7 +4,7 @@ const Chapter = require('../models/chapters');
 module.exports = {
   technologies: async () => {
     try {
-      return  await Technology.find().populate('chapters', '_id title');
+      return  await Technology.find().populate('chapters', '_id title pages');
 
     } catch (e) {
       throw e

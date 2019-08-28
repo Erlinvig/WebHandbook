@@ -26,6 +26,11 @@ module.exports = buildSchema(`
     title: String
     technologyID: String
   }
+  input PageInput {
+    _id: String
+    title: String
+    chapterID: String
+  }
   type RootQuery {
       technologies: [Technology!]!
   }
@@ -35,6 +40,9 @@ module.exports = buildSchema(`
     
     createChapter(chapterInput: ChapterInput): Chapter
     removeChapter(chapterInput: ChapterInput): Chapter
+    
+    createPage(pageInput: PageInput): Page
+    removePage(pageInput: PageInput): Page
   }
   schema {
       query: RootQuery
