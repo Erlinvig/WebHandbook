@@ -3,14 +3,13 @@ const Chapter = require('../models/chapters');
 const Page = require('../models/pages');
 
 module.exports = {
-  technologies: async () => {
+  technologies: async args => {
     try {
-      return  await Technology.find()
+      return await Technology.find(args.technologyInput ? {_id: args.technologyInput._id} : {})
         .populate({
-            path: 'chapters',
-            populate: {path: 'pages'}
-          })
-
+          path: `chapters`,
+          populate: {path: 'pages'}
+        })
     } catch (e) {
       throw e
     }

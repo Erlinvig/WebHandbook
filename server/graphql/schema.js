@@ -17,7 +17,7 @@ module.exports = buildSchema(`
   type Technology {
     _id: ID!
     title: String!
-    chapters: [Chapter]
+    chapters(chapterInput: ChapterInput): [Chapter]
   }
   input TechnologyInput {
     _id: String
@@ -34,7 +34,7 @@ module.exports = buildSchema(`
     chapterID: String
   }
   type RootQuery {
-      technologies: [Technology!]!
+      technologies(technologyInput: TechnologyInput): [Technology!]!
   }
   type RootMutation {
     createTechnology(technologyInput: TechnologyInput): Technology
