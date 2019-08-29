@@ -12,6 +12,9 @@ export default {
   components: {
     technologies,
     TechnologyContent
+  },
+  mounted() {
+
   }
 }
 </script>

@@ -7,8 +7,11 @@
         li.technologies__main
           ul.technologies__list(:style="{transform: `translateX(${animatedPosition}%)`}")
             li.technologies__item(
+
               v-for="(technology, index) in technologies"
               :key="index"
+              :class="{'technologies__item--active': isActive(technology._id)}"
+              @click="setActiveTechnologyID(technology._id)"
             ) {{technology.title}}
         li.technologies__right(@click="next")
           i(class="el-icon-arrow-right" :class="{'technologies__right--active': !isEnd}")
@@ -20,6 +23,13 @@
   export default {
     async mounted() {
       this.technologies = await this.$store.dispatch('content/getTechnologies');
+      if (!this.$route.query.technologyID) {
+        await this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: this.technologies[0]._id});
+        this.$router.push({query: {technologyID: this.technologies[0]._id}})
+      } else {
+        await this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: this.$route.query.technologyID});
+      }
+
     },
     data() {
       return {
@@ -31,6 +41,13 @@
       }
     },
     methods: {
+      setActiveTechnologyID(id) {
+        this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: id});
+        this.$router.push({query: {technologyID: id}})
+      },
+      isActive(id) {
+        return this.getActiveTechnologyId === id
+      },
       next() {
         if (!this.isEnd) {
           this.position -= 1;
@@ -43,6 +60,9 @@
       }
     },
     computed: {
+      getActiveTechnologyId() {
+        return this.$store.getters['content/getActiveTechnologyId']
+      },
       isStart() {
         return this.position >= 0
       },
@@ -52,9 +72,6 @@
       animatedPosition() {
         return this.tweenedPosition * this.getCoefficientTranslate;
       },
-      // getTechnologies() {
-      //   return this.$store.getters['content/getTechnologies']
-      // },
       getCoefficientAdaptive() {
         return this.$store.getters['adaptive/getCoefficientAdaptive'];
       },
@@ -120,6 +137,10 @@
     min-width: 23%;
     display: flex;
     justify-content: center;
+  }
+
+  &__item--active {
+    background-color: #fffca8;
   }
 
   &__left, &__right {

@@ -1,10 +1,20 @@
 import {temporary} from './temporaryData'
 
 export const state = () => ({
-  technologies: temporary
+  technologies: temporary,
+  activeTechnologyID: null
 });
 
+export const mutations = {
+  setActiveTechnologyId(state, payload) {
+    state.activeTechnologyID = payload.activeTechnologyID
+  }
+};
+
 export const actions = {
+  setActiveTechnologyId({commit}, payload) {
+    commit('setActiveTechnologyId', payload)
+  },
   async getTechnologies({commit, state}) {
     const result = await this.$axios.$post('/graphql', {
       query: `
@@ -44,6 +54,7 @@ export const actions = {
 };
 
 export const getters = {
-  getTechnologies: state => state.technologies
+  getActiveTechnologyId: state => state.activeTechnologyID,
+  getTechnologies: state => state.activeTechnologyID
 };
 
