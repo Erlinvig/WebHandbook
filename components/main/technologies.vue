@@ -11,7 +11,7 @@
               v-for="(technology, index) in technologies"
               :key="index"
               :class="{'technologies__item--active': isActive(technology._id)}"
-              @click="setActiveTechnologyID(technology._id)"
+              @click="[setActiveTechnologyID(technology._id), setNewCurrentTechnology(technology._id)]"
             ) {{technology.title}}
         li.technologies__right(@click="next")
           i(class="el-icon-arrow-right" :class="{'technologies__right--active': !isEnd}")
@@ -21,15 +21,9 @@
   import {TweenLite} from "gsap";
 
   export default {
+    props: ['payload'],
     async mounted() {
-      this.technologies = await this.$store.dispatch('content/getTechnologies');
-      if (!this.$route.query.technologyID) {
-        await this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: this.technologies[0]._id});
-        this.$router.push({query: {technologyID: this.technologies[0]._id}})
-      } else {
-        await this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: this.$route.query.technologyID});
-      }
-
+      this.technologies = await this.payload.technologies;
     },
     data() {
       return {
@@ -44,6 +38,9 @@
       setActiveTechnologyID(id) {
         this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: id});
         this.$router.push({query: {technologyID: id}})
+      },
+      async setNewCurrentTechnology(id) {
+        await this.$store.dispatch('content/setTechnologyById', {id})
       },
       isActive(id) {
         return this.getActiveTechnologyId === id

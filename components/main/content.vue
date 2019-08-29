@@ -1,10 +1,10 @@
 <template lang="pug">
-  .wrapper
+  .wrapper(v-if="getTechnologyById")
     .container
       chapter(
-        v-for="chapter in technology.chapters"
-      :key="chapter._id"
-      :chapter="chapter"
+        v-for="chapter in getTechnologyById.chapters"
+        :key="chapter._id"
+        :chapter="chapter"
       )
 </template>
 
@@ -15,20 +15,15 @@
     components: {
       chapter
     },
-    async mounted() {
-
-      this.technology = await this.$store.dispatch('content/getTechnologyById', {id: "5d6679eafd83f724609b87a4"});
-      // console.log(this.$route.query.technologyID);
-      // const technologyID = .technologyID;
-    },
     data() {
       return {
+        technologyID: null,
         technology: {}
       }
     },
     computed: {
       getTechnologyById() {
-
+        return this.$store.getters['content/getCurrentTechnology'];
       }
     }
   }
