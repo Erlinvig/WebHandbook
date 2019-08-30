@@ -11,7 +11,25 @@ export const mutations = {
     state.activeTechnologyID = payload.activeTechnologyID
   },
   setCurrentTechnology(state, payload) {
-    state.currentTechnology = payload.technology
+    state.currentTechnology = payload.technology;
+
+    state.currentTechnology.chapters.forEach((chapter) => {
+      chapter.isOpen = false;
+    });
+  },
+  openChapter(state, payload) {
+    state.currentTechnology.chapters.find(chapter => {
+      if (chapter._id === payload.id) {
+        chapter.isOpen = true
+      }
+    });
+  },
+  closeChapter(state, payload) {
+    state.currentTechnology.chapters.find(chapter => {
+      if (chapter._id === payload.id) {
+        chapter.isOpen = false
+      }
+    });
   }
 };
 
@@ -54,12 +72,24 @@ export const actions = {
       query: query
     });
     commit('setCurrentTechnology', {technology: result.data.technologies[0]});
+  },
+  openChapter({commit}, payload) {
+    commit('openChapter', payload)
+  },
+  closeChapter({commit}, payload) {
+    commit('closeChapter', payload)
   }
 };
 
 export const getters = {
   getActiveTechnologyId: state => state.activeTechnologyID,
   getTechnologies: state => state.activeTechnologyID,
-  getCurrentTechnology: state => state.currentTechnology
+  getCurrentTechnology: state => state.currentTechnology,
+
+
+
+  getChapter: state => payload => {
+    return state.currentTechnology.chapters.find(chapter => chapter._id === payload.id)
+  }
 };
 

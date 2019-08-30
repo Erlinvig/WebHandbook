@@ -1,20 +1,31 @@
 <template lang="pug">
-  main
-    .row(v-for="(row, index) in getRows" :key="index")
-      nuxt-link.row__item(v-for="(item, index) in row" :key="index" to="/")
-        span {{item.title}}
-      .row__item.empty(v-if="row.length < countColumn")
-
+  .wrapper
+    p(@click="show = !show") Нажми меня
+    p {{chapter.isOpen}}
+    transition(name="fade")
+      main(v-if="show")
+        .angles
+          .angle-top-left
+          .angle-top-right
+        .row(v-for="(row, index) in getRows" :key="index")
+          nuxt-link.row__item(v-for="(item, index) in row" :key="index" to="/")
+            span {{item.title}}
+          .row__item.empty(v-if="row.length < countColumn")
+        .angles
+          .angle-bottom-left
+          .angle-bottom-right
 </template>
 
 <script>
   export default {
-    props: ['chapter'],
+    props: {chapter: Object},
     mounted() {
-      this.pages = this.chapter.pages
+      this.pages = this.chapter.pages;
     },
     data() {
       return {
+        ch: null,
+        show: false,
         countColumn: null,
         pages: []
       }
@@ -53,10 +64,53 @@
 </script>
 
 <style lang="scss" scoped>
+  .angles {
+    display: flex;
+    justify-content: space-between;
+    height: 0;
+  }
+  .angle-top-left,
+  .angle-top-right,
+  .angle-bottom-left,
+  .angle-bottom-right {
+    width: 30px;
+    height: 30px;
+  }
+  .angle-top-left {
+    transform: translate(-1em, -1em);
+    border-top: 3px solid #260d43;
+    border-left: 3px solid #260d43;
+  }
+  .angle-bottom-left {
+    transform: translate(-1em, -1em);
+    border-bottom: 3px solid #260d43;
+    border-left: 3px solid #260d43;
+  }
+  .angle-top-right {
+    transform: translate(1em, -1em);
+    border-top: 3px solid #260d43;
+    border-right: 3px solid #260d43;
+  }
+  .angle-bottom-right {
+    transform: translate(1em, -1em);
+    border-bottom: 3px solid #260d43;
+    border-right: 3px solid #260d43;
+  }
+
   main {
+    padding: 1em;
+
     .row {
       display: flex;
       justify-content: space-between;
+      margin: 1em 0;
+      &:nth-child(2) {
+        margin-top: 0;
+      }
+      &:nth-last-child(2) {
+        margin-bottom: 0;
+      }
+
       &__item {
         display: flex;
         border-radius: 5px;
@@ -66,7 +120,6 @@
         justify-content: center;
         align-items: center;
         padding: .8em;
-        margin: .5em 0;
         box-shadow: 0 0 3px rgba(0,0,0,0.2);
         transition: .35s;
         span {
@@ -82,6 +135,26 @@
       }
     }
   }
+
+  .fade-enter-active {
+    animation: fade .5s;
+  }
+  .fade-leave-active {
+    animation: fade .5s reverse;
+  }
+  @keyframes fade {
+    0% {
+      max-height: 0;
+      transform: scale(0);
+      padding: 0;
+    }
+    100% {
+      max-height: 300px;
+      transform: scale(1);
+      padding: 1em;
+    }
+  }
+
 
   @media (min-width: 1280px) {
     .row__item {

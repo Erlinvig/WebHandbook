@@ -1,15 +1,33 @@
 <template lang="pug">
   header
     .line
-    .title
-      i.el-icon-caret-right
+    .title(@click="openChapter")
+      i.el-icon-caret-right(:class="rotateClass")
       h1() {{chapter.title}}
     .line
 </template>
 
 <script>
   export default {
-    props: ['chapter']
+    props: ['chapter'],
+    data() {
+      return {
+        isOpen: false
+      }
+    },
+    methods: {
+      openChapter() {
+        this.isOpen = !this.isOpen;
+        this.isOpen
+          ? this.$store.dispatch('content/openChapter', {id: this.chapter._id})
+          : this.$store.dispatch('content/closeChapter', {id: this.chapter._id});
+      }
+    },
+    computed: {
+      rotateClass() {
+        return this.isOpen ? 'rotateOpen' : 'rotateClose'
+      }
+    }
   }
 </script>
 
@@ -18,6 +36,15 @@
     margin: 1em 0;
     display: flex;
     align-items: center;
+    .el-icon-caret-right {
+      transition: all 0.5s;
+    }
+    .rotateClose {
+      transform: rotate(0deg);
+    }
+    .rotateOpen {
+      transform: rotate(90deg);
+    }
     .title {
       cursor: pointer;
       display: flex;
@@ -38,7 +65,7 @@
       height: 3px;
       background-color: #000;
       &:first-child {
-        width: 30%;
+        min-width: 15%;
         margin-right: 1em;
       }
       &:last-child {
@@ -46,18 +73,6 @@
         margin-left: 1em;
       }
     }
-  }
-
-  @media (min-width: 1280px) {
-
-  }
-
-  @media (min-width: 992px) and (max-width: 1279px) {
-
-  }
-
-  @media (min-width: 768px) and (max-width: 991px) {
-
   }
 
   @media (min-width: 480px) and (max-width: 767px) {
