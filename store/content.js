@@ -11,11 +11,12 @@ export const mutations = {
     state.activeTechnologyID = payload.activeTechnologyID
   },
   setCurrentTechnology(state, payload) {
-    state.currentTechnology = payload.technology;
-
-    state.currentTechnology.chapters.forEach((chapter) => {
+    payload.technology.chapters.forEach((chapter) => {
       chapter.isOpen = false;
     });
+    state.currentTechnology = payload.technology;
+
+
   },
   openChapter(state, payload) {
     state.currentTechnology.chapters.find(chapter => {

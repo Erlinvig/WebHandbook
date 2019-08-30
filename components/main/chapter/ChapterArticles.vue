@@ -1,9 +1,7 @@
 <template lang="pug">
   .wrapper
-    p(@click="show = !show") Нажми меня
-    p {{chapter.isOpen}}
     transition(name="fade")
-      main(v-if="show")
+      main(v-if="chapter.isOpen")
         .angles
           .angle-top-left
           .angle-top-right
