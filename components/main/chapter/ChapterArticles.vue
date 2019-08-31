@@ -9,6 +9,7 @@
           nuxt-link.row__item(v-for="(item, index) in row" :key="index" to="/")
             span {{item.title}}
           .row__item.empty(v-if="row.length < countColumn")
+        p.no-content(v-if="getRows.length === 0") Пусто
         .angles
           .angle-bottom-left
           .angle-bottom-right
@@ -22,7 +23,6 @@
     },
     data() {
       return {
-        ch: null,
         show: false,
         countColumn: null,
         pages: []
@@ -62,41 +62,41 @@
 </script>
 
 <style lang="scss" scoped>
-  .angles {
-    display: flex;
-    justify-content: space-between;
-    height: 0;
-  }
-  .angle-top-left,
-  .angle-top-right,
-  .angle-bottom-left,
-  .angle-bottom-right {
-    width: 30px;
-    height: 30px;
-  }
-  .angle-top-left {
-    transform: translate(-1em, -1em);
-    border-top: 3px solid #260d43;
-    border-left: 3px solid #260d43;
-  }
-  .angle-bottom-left {
-    transform: translate(-1em, -1em);
-    border-bottom: 3px solid #260d43;
-    border-left: 3px solid #260d43;
-  }
-  .angle-top-right {
-    transform: translate(1em, -1em);
-    border-top: 3px solid #260d43;
-    border-right: 3px solid #260d43;
-  }
-  .angle-bottom-right {
-    transform: translate(1em, -1em);
-    border-bottom: 3px solid #260d43;
-    border-right: 3px solid #260d43;
-  }
-
   main {
     padding: 1em;
+
+    .angles {
+      display: flex;
+      justify-content: space-between;
+      height: 0;
+    }
+    .angle-top-left,
+    .angle-top-right,
+    .angle-bottom-left,
+    .angle-bottom-right {
+      width: 1.5em;
+      height: 1.5em;
+    }
+    .angle-top-left {
+      transform: translate(-1em, -1em);
+      border-top: 3px solid #260d43;
+      border-left: 3px solid #260d43;
+    }
+    .angle-bottom-left {
+      transform: translate(-1em, -0.5em);
+      border-bottom: 3px solid #260d43;
+      border-left: 3px solid #260d43;
+    }
+    .angle-top-right {
+      transform: translate(1em, -1em);
+      border-top: 3px solid #260d43;
+      border-right: 3px solid #260d43;
+    }
+    .angle-bottom-right {
+      transform: translate(1em, -0.5em);
+      border-bottom: 3px solid #260d43;
+      border-right: 3px solid #260d43;
+    }
 
     .row {
       display: flex;
@@ -131,6 +131,12 @@
       .empty {
         opacity: 0;
       }
+    }
+    .no-content {
+      background: #dcdcdc;
+      text-align: center;
+      font-size: 18px;
+      padding: 1em;
     }
   }
 
