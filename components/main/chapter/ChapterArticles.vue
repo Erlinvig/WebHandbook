@@ -1,7 +1,7 @@
 <template lang="pug">
-  .wrapper
+  .wrapper(:style="{height: `${animatedHeight}px`}")
     transition(name="fade")
-      main(v-if="chapter.isOpen")
+      main(:style="[{height: `${animatedHeight}px`}, {transform: `scale(${animatedScale})`}]")
         .angles
           .angle-top-left
           .angle-top-right
@@ -23,6 +23,8 @@
     },
     data() {
       return {
+        height: 0,
+        tweenedHeight: 0,
         show: false,
         countColumn: null,
         pages: []
@@ -55,6 +57,28 @@
           }
 
           return this.listToRows(this.countColumn);
+        }
+      },
+      animatedHeight() {
+        if (this.getRows.length > 0) {
+          return (this.tweenedHeight * (14 + (this.getRows.length) * (40 + 14) + 1)).toFixed(0);
+        } else {
+          return (this.tweenedHeight * 75).toFixed(0);
+        }
+      },
+      animatedScale() {
+        return this.tweenedHeight;
+      },
+      isOpen() {
+        return this.chapter.isOpen
+      }
+    },
+    watch: {
+      isOpen: function(newValue) {
+        if(this.chapter.isOpen) {
+          TweenLite.to(this.$data, 0.5, { tweenedHeight: +newValue });
+        } else {
+          TweenLite.to(this.$data, 0.5, { tweenedHeight: +newValue });
         }
       }
     }
@@ -101,7 +125,7 @@
     .row {
       display: flex;
       justify-content: space-between;
-      margin: 1em 0;
+      margin: 14px 0;
       &:nth-child(2) {
         margin-top: 0;
       }
@@ -110,6 +134,7 @@
       }
 
       &__item {
+        max-height: 40px;
         display: flex;
         border-radius: 5px;
         background-color: #fff;
@@ -117,7 +142,7 @@
         text-align: center;
         justify-content: center;
         align-items: center;
-        padding: .8em;
+        padding: 12px;
         box-shadow: 0 0 3px rgba(0,0,0,0.2);
         transition: .35s;
         span {
@@ -140,24 +165,23 @@
     }
   }
 
-  .fade-enter-active {
-    animation: fade .5s;
-  }
-  .fade-leave-active {
-    animation: fade .5s reverse;
-  }
-  @keyframes fade {
-    0% {
-      max-height: 0;
-      transform: scale(0);
-      padding: 0;
-    }
-    100% {
-      max-height: 300px;
-      transform: scale(1);
-      padding: 1em;
-    }
-  }
+  /*.fade-enter-active {*/
+  /*  animation: fade .5s;*/
+  /*}*/
+  /*.fade-leave-active {*/
+  /*  animation: fade .5s reverse;*/
+  /*}*/
+
+  /*@keyframes fade {*/
+  /*  0% {*/
+  /*    transform: scale(0);*/
+  /*    padding: 0;*/
+  /*  }*/
+  /*  100% {*/
+  /*    transform: scale(1);*/
+  /*    padding: 1em;*/
+  /*  }*/
+  /*}*/
 
 
   @media (min-width: 1280px) {

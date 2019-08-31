@@ -1,5 +1,5 @@
 <template lang="pug">
-  .wrapper(v-if="getCurrentTechnology")
+  .wrapper-content(v-if="getCurrentTechnology")
     .container
       chapter(
         v-for="chapter in getCurrentTechnology.chapters"
@@ -30,5 +30,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .wrapper-content {
+    margin: 3em 0;
+  }
 </style>
