@@ -1,38 +1,11 @@
 const { buildSchema } = require('graphql');
+const types = require('./types');
+const inputs = require('./inputs');
 
 module.exports = buildSchema(`
-  type Page {
-    _id: ID!
-    title: String!
-    chapterID: String!
-    technologyID: String!
-    content: String
-  }
-  type Chapter {
-    _id: ID!
-    title: String!
-    technologyID: String!
-    pages: [Page]
-  }
-  type Technology {
-    _id: ID!
-    title: String!
-    chapters(chapterInput: ChapterInput): [Chapter]
-  }
-  input TechnologyInput {
-    _id: String
-    title: String
-  }
-  input ChapterInput {
-    _id: String
-    title: String
-    technologyID: String
-  }
-  input PageInput {
-    _id: String
-    title: String
-    chapterID: String
-  }
+  ${types}
+  ${inputs}
+  
   type RootQuery {
       technologies(technologyInput: TechnologyInput): [Technology!]!
   }
