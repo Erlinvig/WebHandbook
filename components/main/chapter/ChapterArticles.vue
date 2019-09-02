@@ -1,18 +1,17 @@
 <template lang="pug">
   .wrapper(:style="{height: `${animatedHeight}px`}")
-    transition(name="fade")
-      main(:style="[{height: `${animatedHeight}px`}, {transform: `scale(${animatedScale})`}]")
-        .angles
-          .angle-top-left
-          .angle-top-right
-        .row(v-for="(row, index) in getRows" :key="index")
-          nuxt-link.row__item(v-for="(item, index) in row" :key="index" to="/")
-            span {{item.title}}
-          .row__item.empty(v-if="row.length < countColumn")
-        p.no-content(v-if="getRows.length === 0") Пусто
-        .angles
-          .angle-bottom-left
-          .angle-bottom-right
+    main(:style="[{height: `${animatedHeight}px`}, {transform: `scale(${animatedScale})`}]")
+      .angles
+        .angle-top-left
+        .angle-top-right
+      .row(v-for="(row, index) in getRows" :key="index")
+        nuxt-link.row__item(v-for="(item, index) in row" :key="index" to="/")
+          span {{item.title}}
+        .row__item.empty(v-if="row.length < countColumn")
+      p.no-content(v-if="getRows.length === 0") Пусто
+      .angles
+        .angle-bottom-left
+        .angle-bottom-right
 </template>
 
 <script>

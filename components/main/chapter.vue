@@ -19,8 +19,4 @@
 </script>
 
 <style lang="scss" scoped>
-  .wrapper {
-    margin: 1em 0;
-  }
-
 </style>

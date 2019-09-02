@@ -33,7 +33,7 @@
 
 <style lang="scss" scoped>
   header {
-    margin: 1em 0;
+    margin: .5em 0;
     display: flex;
     align-items: center;
     .el-icon-caret-right {
@@ -96,10 +96,18 @@
   @media (min-width: 320px) and (max-width: 479px) {
     header {
       .line {
-        display: none;
+
+        &:first-child {
+          min-width: 0;
+          width: 50%;
+        }
+        &:last-child {
+          width: 50%;
+        }
       }
       .title {
-        min-width: 100%;
+        justify-content: center;
+        /*min-width: 100%;*/
         i, h1 {
           font-size: 18px;
         }
@@ -113,6 +121,7 @@
         display: none;
       }
       .title {
+        justify-content: center;
         min-width: 100%;
         i, h1 {
           font-size: 18px;
