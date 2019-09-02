@@ -24,6 +24,7 @@
       return {
         height: 0,
         tweenedHeight: 0,
+        tweenedScale: 0,
         show: false,
         countColumn: null,
         pages: []
@@ -66,7 +67,7 @@
         }
       },
       animatedScale() {
-        return this.tweenedHeight;
+        return this.tweenedScale;
       },
       isOpen() {
         return this.chapter.isOpen
@@ -75,9 +76,20 @@
     watch: {
       isOpen: function(newValue) {
         if(this.chapter.isOpen) {
-          TweenLite.to(this.$data, 0.5, { tweenedHeight: +newValue });
-        } else {
-          TweenLite.to(this.$data, 0.5, { tweenedHeight: +newValue });
+          TweenLite.to(this.$data, 0.15, { tweenedHeight: +newValue });
+        }
+        else if(!this.chapter.isOpen) {
+          TweenLite.to(this.$data, 0.35, { tweenedScale: +newValue });
+        }
+      },
+      tweenedHeight: function (newValue) {
+        if(this.tweenedHeight === 1) {
+          TweenLite.to(this.$data, 0.35, { tweenedScale: +newValue });
+        }
+      },
+      tweenedScale: function(newValue) {
+        if(this.tweenedScale < 0.5 && !this.chapter.isOpen) {
+          TweenLite.to(this.$data, 0.15, { tweenedHeight: +newValue });
         }
       }
     }
