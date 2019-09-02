@@ -1,9 +1,9 @@
-const technology = require('./technology');
-const chapter = require('./chapter');
-const page = require('./page');
+const technologyInput = require('./technology');
+const chapterInput = require('./chapter');
+const pageInput = require('./page');
 
 module.exports = `
-  ${technology}
-  ${chapter}
-  ${page}
+  ${technologyInput}
+  ${chapterInput}
+  ${pageInput}
 `;
