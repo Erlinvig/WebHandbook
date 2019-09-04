@@ -5,9 +5,11 @@
         ul
           li
             nuxt-link.navigation__link(to="/") Главная
+          li
+            nuxt-link.navigation__link(to="/admin/content") Админка
         ul
           li
-            nuxt-link.navigation__link(to="/") Вход
+            nuxt-link.navigation__link.navigation__link--right(to="/") Вход
 </template>
 
 <script>
@@ -22,11 +24,20 @@
     .navigation {
       display: flex;
       justify-content: space-between;
+      ul:first-child {
+        display: flex;
+        justify-content: flex-start;
+      }
       &__link {
         color: white;
         font-size: 22px;
         font-weight: 700;
+        margin-right: 1.5em;
+        &--right {
+          margin-right: 0;
+        }
       }
+
     }
   }
 </style>
