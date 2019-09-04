@@ -1,9 +1,9 @@
 <template lang="pug">
   .app
-    navigation
-    .wrapper-admin-layout
-      admin-menu
-      nuxt
+    navigation.app__navigation
+    .admin-layout
+      admin-menu.admin-layout__menu
+      nuxt.admin-layout__content
 </template>
 
 <script>
@@ -18,8 +18,38 @@
 </script>
 
 <style lang="scss" scoped>
-  .wrapper-admin-layout {
-    display: flex;
-    justify-content: flex-start;
+  .app {
+    &__navigation {
+      width: 100%;
+      position: fixed;
+    }
+  }
+  .admin-layout {
+    &__menu {
+      position: fixed;
+      height: 100%;
+      width: 200px;
+      margin-top: 62px;
+    }
+    &__content {
+      position: absolute;
+      left: 200px;
+      top: 62px;
+      margin: 2em 3em;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .admin-layout {
+      &__menu {
+        width: 50px;
+      }
+      &__content {
+        position: absolute;
+        left: 50px;
+        top: 62px;
+        margin: 1em;
+      }
+    }
   }
 </style>

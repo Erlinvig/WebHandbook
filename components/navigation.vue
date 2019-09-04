@@ -5,8 +5,6 @@
         ul
           li
             nuxt-link.navigation__link(to="/") Главная
-          li
-            nuxt-link.navigation__link(to="/admin/content") Админка
         ul
           li
             nuxt-link.navigation__link.navigation__link--right(to="/") Вход
@@ -18,8 +16,10 @@
 
 <style lang="scss" scoped>
   .wrapper {
+    z-index: 100;
+    height: 62px;
     background-color: #170c2b;
-    padding: 1.7em 0;
+    padding: 20px 0;
 
     .navigation {
       display: flex;
@@ -30,8 +30,8 @@
       }
       &__link {
         color: white;
-        font-size: 22px;
-        font-weight: 700;
+        font-size: 20px;
+        font-weight: 500;
         margin-right: 1.5em;
         &--right {
           margin-right: 0;
