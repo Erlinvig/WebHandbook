@@ -1,6 +1,5 @@
 <template lang="pug">
   .app
-    navigation.app__navigation
     .admin-layout
       admin-menu.admin-layout__menu
       nuxt.admin-layout__content
@@ -29,13 +28,11 @@
       position: fixed;
       height: 100%;
       width: 200px;
-      margin-top: 62px;
     }
     &__content {
       position: absolute;
       left: 200px;
-      top: 62px;
-      margin: 2em 3em;
+      margin: 1em;
     }
   }
 
@@ -47,7 +44,6 @@
       &__content {
         position: absolute;
         left: 50px;
-        top: 62px;
         margin: 1em;
       }
     }
