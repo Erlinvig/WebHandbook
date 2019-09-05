@@ -5,11 +5,13 @@
 
 <script>
   export default {
-    layout: 'admin'
+    layout: 'admin',
+    components: {
+
+    }
   }
 </script>
 
 <style lang="scss" scoped>
-  .wrapper-content {
-  }
+
 </style>

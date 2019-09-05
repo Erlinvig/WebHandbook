@@ -2,7 +2,8 @@
   .app
     .admin-layout
       admin-menu.admin-layout__menu
-      nuxt.admin-layout__content
+      .admin-layout__wrapper
+        nuxt.admin-layout__wrapper__content
 </template>
 
 <script>
@@ -29,10 +30,15 @@
       height: 100%;
       width: 200px;
     }
-    &__content {
+    &__wrapper {
       position: absolute;
+      width: calc(100% - 200px - 4em);
       left: 200px;
-      margin: 1em;
+      margin: 1em 2em;
+
+      &__content {
+        max-width: 100%;
+      }
     }
   }
 
@@ -41,8 +47,9 @@
       &__menu {
         width: 50px;
       }
-      &__content {
+      &__wrapper {
         position: absolute;
+        width: calc(100% - 50px - 2em);
         left: 50px;
         margin: 1em;
       }
