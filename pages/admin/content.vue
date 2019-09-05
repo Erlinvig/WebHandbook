@@ -1,15 +1,18 @@
 <template lang="pug">
   .wrapper-content
     technologies-panel(v-if="technologies" :payload="{technologies, location: 'admin'}")
+    technology-content(v-if="technology")
 </template>
 
 <script>
   import TechnologiesPanel from '~/components/shared/technologies.vue';
+  import TechnologyContent from '~/components/admin/content/ContentTable';
 
   export default {
     layout: 'admin',
     components: {
-      TechnologiesPanel
+      TechnologiesPanel,
+      TechnologyContent
     },
     async mounted() {
       this.technologies = await this.$store.dispatch('content/getTechnologies');
@@ -22,6 +25,7 @@
         this.technologyID = this.$route.query.technologyID
       }
       await this.$store.dispatch('content/setTechnologyById', {id: this.technologyID});
+      this.technology = await this.$store.getters['content/getCurrentTechnology'];
     },
     data() {
       return {
