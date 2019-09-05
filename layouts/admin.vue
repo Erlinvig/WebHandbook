@@ -13,6 +13,21 @@
     components: {
       navigation,
       AdminMenu
+    },
+    data() {
+      return {
+        windowWidth: null
+      }
+    },
+    methods: {
+      getWindowWidth(event) {
+        this.windowWidth = document.documentElement.clientWidth;
+        this.$store.dispatch('adaptive/setOptions', {widthWindow: document.documentElement.clientWidth})
+      }
+    },
+    mounted() {
+      window.addEventListener('resize', this.getWindowWidth);
+      this.getWindowWidth();
     }
   }
 </script>
@@ -34,7 +49,7 @@
       position: absolute;
       width: calc(100% - 200px - 4em);
       left: 200px;
-      margin: 1em 2em;
+      margin: 0 2em;
 
       &__content {
         max-width: 100%;
@@ -51,7 +66,7 @@
         position: absolute;
         width: calc(100% - 50px - 2em);
         left: 50px;
-        margin: 1em;
+        margin: 0 1em;
       }
     }
   }

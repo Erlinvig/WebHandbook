@@ -1,11 +1,11 @@
 <template lang="pug">
   .page
-    technologies-panel(v-if="technologies" :payload="{technologies}")
+    technologies-panel(v-if="technologies" :payload="{technologies, location: 'main'}")
     technology-content
 </template>
 
 <script>
-import TechnologiesPanel from '~/components/main/technologies.vue'
+import TechnologiesPanel from '~/components/shared/technologies.vue'
 import TechnologyContent from '~/components/main/content.vue'
 
 export default {
