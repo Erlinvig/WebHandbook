@@ -10,17 +10,18 @@
           .column__title
             span {{chapter.title}}
             i(class="el-icon-edit")
-            i(class="el-icon-delete")
+            i(class="el-icon-delete" @click="removeChapter({_id: chapter._id})")
           .column__page(
             v-for="page in chapter.pages"
           )
             span {{page.title}}
             i(class="el-icon-edit")
-            i(class="el-icon-delete")
-          .column__page-creator
+            i(class="el-icon-delete" @click="removePage({_id: page._id})")
+          .column__page-creator(@click="createPage({chapterID: chapter._id})")
             span Создать страницу
+        .chapter-creator
+          span(@click="createChapter({technologyID: getCurrentTechnology._id})") Создать раздел
     i.table__navigation(class="el-icon-arrow-right")
-
 </template>
 
 <script>
@@ -36,48 +37,23 @@
       }
     },
     methods: {
-      getMaxChapter() {
-        let chapters = this.getCurrentTechnology.chapters;
-
-        let result = chapters.length > 0 ?
-          chapters.reduce((result, currentItem, currentIndex, array) => {
-            result = currentIndex === 1 ?
-              {
-                index: 0,
-                value: result.pages.length
-              } : result;
-
-            return currentItem.pages.length > result.value ?
-              {
-                index: currentIndex,
-                value: currentItem.pages.length
-              } : result;
-          })
-          : { value: null };
-
-        return result.value;
+      createPage(payload) {
+        this.$store.dispatch('content/createPage', {chapterID: payload.chapterID, title: "Page"})
+      },
+      removePage(payload) {
+        this.$store.dispatch('content/removePage', {_id: payload._id})
+      },
+      createChapter(payload) {
+        this.$store.dispatch('content/createChapter', {technologyID: payload.technologyID, title: "New chapter"})
+      },
+      removeChapter(payload) {
+        this.$store.dispatch('content/removeChapter', {_id: payload._id})
       }
     },
     computed: {
       getCurrentTechnology() {
         return this.$store.getters['content/getCurrentTechnology'];
       },
-      getRows() {
-        const maxChapter = this.getMaxChapter();
-        if (maxChapter) {
-          let rows = [];
-          for (let i = 0; i < maxChapter; i++) {
-            let row = [];
-            this.getCurrentTechnology.chapters.forEach(chapter => {
-              chapter.pages[i] ? row.push(chapter.pages[i]) : row.push(null)
-            });
-            rows.push(row)
-          }
-          return rows
-        } else {
-          return null
-        }
-      }
     }
   }
 </script>

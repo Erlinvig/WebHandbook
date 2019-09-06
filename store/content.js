@@ -74,6 +74,66 @@ export const actions = {
     });
     commit('setCurrentTechnology', {technology: result.data.technologies[0]});
   },
+  async createPage({commit, state, dispatch}, payload) {
+    const query = `
+      mutation {
+        createPage(pageInput: {title: "${payload.title}", chapterID: "${payload.chapterID}" }) {
+          _id
+          chapterID
+          technologyID
+        }
+      }
+    `;
+
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+    await dispatch('setTechnologyById', {id: state.activeTechnologyID})
+  },
+
+  async removePage({commit, state, dispatch}, payload) {
+    const query = `
+      mutation {
+        removePage(pageInput: {_id: "${payload._id}" }) {
+          _id
+        }
+      }
+    `;
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+    await dispatch('setTechnologyById', {id: state.activeTechnologyID})
+  },
+
+  async createChapter({commit, state, dispatch}, payload) {
+    const query = `
+      mutation {
+        createChapter(chapterInput: {title: "${payload.title}", technologyID: "${payload.technologyID}" }) {
+          _id
+        }
+      }
+    `;
+
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+    await dispatch('setTechnologyById', {id: state.activeTechnologyID})
+  },
+
+  async removeChapter({commit, state, dispatch}, payload) {
+    const query = `
+      mutation {
+        removeChapter(chapterInput: {_id: "${payload._id}" }) {
+          _id
+        }
+      }
+    `;
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+    await dispatch('setTechnologyById', {id: state.activeTechnologyID})
+  },
+
   openChapter({commit}, payload) {
     commit('openChapter', payload)
   },
