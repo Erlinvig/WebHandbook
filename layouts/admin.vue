@@ -1,5 +1,6 @@
 <template lang="pug">
   .app
+    dialog-window.dialog
     .admin-layout
       admin-menu.admin-layout__menu
       .admin-layout__wrapper
@@ -9,10 +10,13 @@
 <script>
   import navigation from '../components/navigation'
   import AdminMenu from '../components/admin/AdminMenu'
+  import DialogWindow from '../components/shared/DialogWindow'
+
   export default {
     components: {
       navigation,
-      AdminMenu
+      AdminMenu,
+      DialogWindow
     },
     data() {
       return {
@@ -34,6 +38,15 @@
 
 <style lang="scss" scoped>
   .app {
+    .dialog {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      z-index: 200;
+    }
     &__navigation {
       width: 100%;
       position: fixed;
