@@ -1,7 +1,6 @@
-import {temporary} from './temporaryData'
+import queryContent from './query/content'
 
 export const state = () => ({
-  technologies: temporary,
   activeTechnologyID: null,
   currentTechnology: null
 });
@@ -39,51 +38,23 @@ export const actions = {
     commit('setActiveTechnologyId', payload)
   },
   async getTechnologies({commit, state}) {
+    const query = queryContent.getTechnologies();
     const result = await this.$axios.$post('/graphql', {
-      query: `
-        query {
-          technologies {
-            _id
-            title
-          }
-        }
-      `
+      query: query
     });
     return result.data.technologies
   },
 
   async setTechnologyById({commit}, payload) {
-    const query = `
-        query {
-          technologies(technologyInput: {_id: "${payload.id}"}) {
-            _id
-            title
-            chapters {
-              _id
-              title
-              pages {
-                _id
-                title
-              }
-            }
-          }
-        }
-      `;
+    const query = queryContent.getTechnologyById(payload);
     const result = await this.$axios.$post('/graphql?', {
       query: query
     });
     commit('setCurrentTechnology', {technology: result.data.technologies[0]});
   },
+
   async createPage({commit, state, dispatch}, payload) {
-    const query = `
-      mutation {
-        createPage(pageInput: {title: "${payload.title}", chapterID: "${payload.chapterID}" }) {
-          _id
-          chapterID
-          technologyID
-        }
-      }
-    `;
+    const query = queryContent.createPage(payload);
 
     const result = await this.$axios.$post('/graphql?', {
       query: query
@@ -92,13 +63,7 @@ export const actions = {
   },
 
   async removePage({commit, state, dispatch}, payload) {
-    const query = `
-      mutation {
-        removePage(pageInput: {_id: "${payload._id}" }) {
-          _id
-        }
-      }
-    `;
+    const query = queryContent.removePage(payload);
     const result = await this.$axios.$post('/graphql?', {
       query: query
     });
@@ -106,13 +71,7 @@ export const actions = {
   },
 
   async createChapter({commit, state, dispatch}, payload) {
-    const query = `
-      mutation {
-        createChapter(chapterInput: {title: "${payload.title}", technologyID: "${payload.technologyID}" }) {
-          _id
-        }
-      }
-    `;
+    const query = queryContent.createChapter(payload);
 
     const result = await this.$axios.$post('/graphql?', {
       query: query
@@ -121,13 +80,7 @@ export const actions = {
   },
 
   async removeChapter({commit, state, dispatch}, payload) {
-    const query = `
-      mutation {
-        removeChapter(chapterInput: {_id: "${payload._id}" }) {
-          _id
-        }
-      }
-    `;
+    const query = queryContent.removeChapter(payload);
     const result = await this.$axios.$post('/graphql?', {
       query: query
     });
@@ -137,6 +90,7 @@ export const actions = {
   openChapter({commit}, payload) {
     commit('openChapter', payload)
   },
+
   closeChapter({commit}, payload) {
     commit('closeChapter', payload)
   }
@@ -146,8 +100,6 @@ export const getters = {
   getActiveTechnologyId: state => state.activeTechnologyID,
   getTechnologies: state => state.activeTechnologyID,
   getCurrentTechnology: state => state.currentTechnology,
-
-
 
   getChapter: state => payload => {
     return state.currentTechnology.chapters.find(chapter => chapter._id === payload.id)
