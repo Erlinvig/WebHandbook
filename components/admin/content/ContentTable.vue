@@ -10,13 +10,19 @@
           .column__title
             span {{chapter.title}}
             i(class="el-icon-edit")
-            i(class="el-icon-delete" @click="removeChapter({_id: chapter._id})")
+            i(
+              class="el-icon-delete"
+              @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить раздел?', actionOK: 'content/removeChapter', actionOKPayload: {_id: chapter._id}})"
+            )
           .column__page(
             v-for="page in chapter.pages"
           )
             span {{page.title}}
             i(class="el-icon-edit")
-            i(class="el-icon-delete" @click="removePage({_id: page._id})")
+            i(
+              class="el-icon-delete"
+              @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить страницу?', actionOK: 'content/removePage', actionOKPayload: {_id: page._id}})"
+              )
           .column__page-creator(@click="createPage({chapterID: chapter._id})")
             span Создать страницу
         .chapter-creator
@@ -37,6 +43,9 @@
       }
     },
     methods: {
+      openDialog(payload) {
+        this.$store.dispatch('dialog/open', payload)
+      },
       createPage(payload) {
         this.$store.dispatch('content/createPage', {chapterID: payload.chapterID, title: "Page"})
       },

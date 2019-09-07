@@ -1,14 +1,29 @@
 <template lang="pug">
-  .dialog-wrapper
-    .content(is="standard")
-    .bg
+  .dialog-wrapper(v-if="isOpen")
+    .content(:is="payload.type" :payload="payload")
+    .bg(@click="close")
 </template>
 
 <script>
-  import standard from './standard'
+  import notification from './notification'
+  import confirmation from './confirmation'
   export default {
     components: {
-      standard
+      notification,
+      confirmation
+    },
+    methods: {
+      close() {
+        this.$store.dispatch('dialog/close')
+      }
+    },
+    computed: {
+      isOpen() {
+        return this.$store.getters['dialog/getStateOpening'];
+      },
+      payload() {
+        return this.$store.getters['dialog/getPayload'];
+      }
     }
   }
 </script>
@@ -25,7 +40,7 @@
   .content {
     background-color: #fff;
     border-radius: 5px;
-    padding: 1em;
+    padding: 2em;
     box-shadow: 0 0 6px rgba(0,0,0,0.6);
     z-index: 215;
   }

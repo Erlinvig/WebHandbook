@@ -48,3 +48,18 @@ a {
   color: #000;
   text-decoration: none;
 }
+
+button {
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+}
+
+button:focus {
+  border: none;
+  outline: none;
+}
