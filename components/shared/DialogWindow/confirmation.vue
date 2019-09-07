@@ -3,7 +3,7 @@
     .confirmation-wrapper__message
       span {{payload.message}}
     .confirmation-wrapper__actions
-      button(@click="open") Ок
+      button(@click="ok") Ок
       button(@click="close") Отмена
 </template>
 
@@ -14,7 +14,7 @@
       close() {
         this.$store.dispatch('dialog/close')
       },
-      open() {
+      ok() {
         this.$store.dispatch(this.payload.actionOK, this.payload.actionOKPayload);
         this.close();
       }

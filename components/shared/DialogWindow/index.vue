@@ -1,6 +1,7 @@
 <template lang="pug">
   .dialog-wrapper(v-if="isOpen")
-    .content(:is="payload.type" :payload="payload")
+    transition(name="fade")
+      .content(:is="payload.type" :payload="payload"  v-if="isShow")
     .bg(@click="close")
 </template>
 
@@ -12,6 +13,11 @@
       notification,
       confirmation
     },
+    data() {
+      return {
+
+      }
+    },
     methods: {
       close() {
         this.$store.dispatch('dialog/close')
@@ -20,6 +26,9 @@
     computed: {
       isOpen() {
         return this.$store.getters['dialog/getStateOpening'];
+      },
+      isShow() {
+        return this.$store.getters['dialog/getStateShow'];
       },
       payload() {
         return this.$store.getters['dialog/getPayload'];
@@ -43,5 +52,23 @@
     padding: 2em;
     box-shadow: 0 0 6px rgba(0,0,0,0.6);
     z-index: 215;
+  }
+
+  .fade-enter-active {
+    animation: fade .35s;
+  }
+  .fade-leave-active {
+    animation: fade .35s reverse;
+  }
+
+  @keyframes fade {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
   }
 </style>
