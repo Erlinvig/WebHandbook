@@ -203,4 +203,33 @@
       }
     }
   }
+
+
+  @media (min-width: 480px) and (max-width: 991px) {
+    .table {
+      &__content {
+        .column {
+          min-width: 50%;
+        }
+      }
+      &__chapter-creator {
+        min-width: 50%;
+      }
+    }
+  }
+
+  @media (max-width: 479px) {
+    .table {
+      &__content {
+        .column {
+          min-width: 100%;
+        }
+      }
+      &__chapter-creator {
+        min-width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+
 </style>
