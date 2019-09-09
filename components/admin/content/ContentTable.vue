@@ -1,10 +1,12 @@
 <template lang="pug">
   .table(v-if="getCurrentTechnology")
-    i.table__navigation(
-      @click="previous"
-      class="el-icon-arrow-left"
-      :class="{'table__navigation--active': !isStart}"
-      )
+    .table__navigation
+      .box
+        i(
+          @click="previous"
+          class="el-icon-arrow-left"
+          :class="{'active': !isStart}"
+          )
     .wrapper
       .table__content(:style="{transform: `translateX(${animatedPosition}%)`}")
         .column(
@@ -13,29 +15,36 @@
         )
           .column__title
             span {{chapter.title}}
-            i(class="el-icon-edit")
-            i(
-              class="el-icon-delete"
-              @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить раздел?', actionOK: 'content/removeChapter', actionOKPayload: {_id: chapter._id}})"
-            )
+            .actions
+              i(class="el-icon-edit")
+              i(
+                class="el-icon-delete"
+                @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить раздел?', actionOK: 'content/removeChapter', actionOKPayload: {_id: chapter._id}})"
+              )
           .column__page(
             v-for="page in chapter.pages"
           )
             span {{page.title}}
-            i(class="el-icon-edit")
-            i(
-              class="el-icon-delete"
-              @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить страницу?', actionOK: 'content/removePage', actionOKPayload: {_id: page._id}})"
-              )
+            .actions
+              i(class="el-icon-edit")
+              i(
+                class="el-icon-delete"
+                @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить страницу?', actionOK: 'content/removePage', actionOKPayload: {_id: page._id}})"
+                )
           .column__page-creator(@click="createPage({chapterID: chapter._id})")
-            span Создать страницу
+            button.btn Создать страницу
         .table__chapter-creator
-          button(@click="createChapter({technologyID: getCurrentTechnology._id})") Создать раздел
-    i.table__navigation(
-      @click="next"
-      class="el-icon-arrow-right"
-      :class="{'table__navigation--active': !isEnd}"
-      )
+          .creator(v-if="isCreateChapter")
+            input.creator__field(placeholder="Название раздела" v-model="chapterTitle")
+            .creator__enter.el-icon-circle-check(@click="createChapter({technologyID: getCurrentTechnology._id, title: chapterTitle})")
+          button.btn(@click="isCreateChapter = true" v-if="!isCreateChapter") Создать раздел
+    .table__navigation
+      .box
+        i(
+          @click="next"
+          class="el-icon-arrow-right"
+          :class="{'active': !isEnd}"
+          )
 </template>
 
 <script>
@@ -45,7 +54,8 @@
     },
     data() {
       return {
-        // technologyID: null,
+        chapterTitle: '',
+        isCreateChapter: false,
         technology: null,
         countChaptersDisplayed: 0,
         coefficientTranslate: 0,
@@ -63,8 +73,11 @@
       removePage(payload) {
         this.$store.dispatch('content/removePage', {_id: payload._id})
       },
-      createChapter(payload) {
-        this.$store.dispatch('content/createChapter', {technologyID: payload.technologyID, title: "New chapter"})
+      async createChapter(payload) {
+        if (payload.title) {
+          await this.$store.dispatch('content/createChapter', {technologyID: payload.technologyID, title: payload.title});
+          this.isCreateChapter = false;
+        }
       },
       removeChapter(payload) {
         this.$store.dispatch('content/removeChapter', {_id: payload._id})
@@ -132,6 +145,8 @@
       getCurrentTechnologyID: function() {
         this.position = 0;
         this.tweenedPosition = 0;
+        this.isCreateChapter = false;
+        this.chapterTitle = '';
       }
     }
   }
@@ -145,16 +160,31 @@
     border-radius: 5px;
     padding: 10px;
     &__navigation {
-      padding: 1em 0;
-      align-self: center;
-      color: #a2a2a2;
-      font-size: 16px;
-      font-weight: 700;
       min-width: 25px;
-      text-align: center;
-      &--active {
+      .box {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      i {
+        position: fixed;
+        padding: 2em 0;
+        align-self: center;
+        color: #a2a2a2;
+        font-size: 16px;
+        font-weight: 700;
+        min-width: 25px;
+        text-align: center;
+      }
+      .active {
         cursor: pointer;
         color: #050619;
+        border-radius: 1em;
+        transition: .35s;
+        &:hover {
+          background-color: #e2e2e2;
+        }
       }
     }
     .wrapper {
@@ -168,9 +198,23 @@
       .column {
         min-width: 33.5%;
         &__title, &__page {
+          padding: 5px;
+          border-bottom: 1px solid #cacaca;
           font-size: 16px;
           display: flex;
-          justify-content: center;
+          justify-content: space-between;
+          margin: 0 1em;
+          .actions {
+            min-width: max-content;
+            i {
+              cursor: pointer;
+              font-weight: 500;
+              padding: 5px;
+              &:hover {
+                color: blue;
+              }
+            }
+          }
           span, i {
             font-size: 16px;
           }
@@ -183,16 +227,13 @@
         }
         &__title {
           font-weight: 700;
-          padding-bottom: .5em;
         }
-        &__page {
-          padding: 5px;
-        }
+
         &__page-creator {
-          font-size: 16px;
+          font-size: 14px;
           display: flex;
           justify-content: center;
-          padding: 5px;
+          padding: 1em;
           span {
             font-size: 16px;
           }
@@ -204,20 +245,43 @@
       min-width: 33.5%;
       display: flex;
       flex-direction: column;
-      button {
-        align-self: center;
-        cursor: pointer;
-        border: 1px solid #c8cddb;
-        padding: .5em 1em;
-        border-radius: 1em;
-        transition: .5s;
-        &:hover {
-          background-color: #dafcd3;
+      .creator {
+        display: flex;
+        justify-content: center;
+        font-size: 16px;
+
+        &__field {
+          padding: 5px;
+          border-bottom: 1px solid blue;
+          &:focus {
+            border-bottom: 2px solid blue;
+          }
+        }
+        &__enter {
+          transition: .35s;
+          cursor: pointer;
+          margin-left: .5em;
+          font-size: 28px;
+          color: #00ca12;
+          &:hover {
+            color: #5bf45a;
+          }
         }
       }
     }
   }
 
+  .btn {
+    align-self: center;
+    cursor: pointer;
+    border: 1px solid #c8cddb;
+    padding: .5em 1em;
+    border-radius: 1em;
+    transition: .5s;
+    &:hover {
+      background-color: #dafcd3;
+    }
+  }
 
   @media (min-width: 480px) and (max-width: 991px) {
     .table {
@@ -237,6 +301,28 @@
       &__content {
         .column {
           min-width: 100%;
+          &__title, &__page {
+            flex-direction: column;
+            background-color: #f2f2f2;
+            border-radius: .5em;
+            margin: 0 .5em .5em;
+            span {
+              text-align: center;
+              margin-bottom: .5em;
+              padding-right: 0;
+            }
+            .actions {
+              margin: 0 .5em;
+              border-radius: 1em;
+              border: 1px solid #cecece;
+              i {
+                padding: 3px;
+                width: 50%;
+                text-align: center;
+
+              }
+            }
+          }
         }
       }
       &__chapter-creator {
