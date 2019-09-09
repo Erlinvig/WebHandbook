@@ -42,11 +42,10 @@
   export default {
     mounted() {
       this.technology = this.$store.getters['content/getCurrentTechnology']
-
     },
     data() {
       return {
-        technologyID: null,
+        // technologyID: null,
         technology: null,
         countChaptersDisplayed: 0,
         coefficientTranslate: 0,
@@ -88,11 +87,17 @@
       isEnd() {
         return this.position <= -(this.getCurrentTechnology.chapters.length - this.countChaptersDisplayed + 1)
       },
+      endPosition() {
+        return - (this.getCurrentTechnology.chapters.length - this.countChaptersDisplayed + 1)
+      },
       getCoefficientAdaptive() {
         return this.$store.getters['adaptive/getCoefficientAdaptive'];
       },
       getCurrentTechnology() {
         return this.$store.getters['content/getCurrentTechnology'];
+      },
+      getCurrentTechnologyID() {
+        return this.$store.getters['content/getCurrentTechnology']._id;
       },
       animatedPosition() {
         return this.tweenedPosition * this.getCoefficientTranslate;
@@ -118,6 +123,15 @@
     watch: {
       position: function(newValue) {
         TweenLite.to(this.$data, 0.35, { tweenedPosition: newValue });
+      },
+      endPosition: function (newValue) {
+        if (this.position < newValue && newValue <= 0) {
+          this.position = newValue;
+        }
+      },
+      getCurrentTechnologyID: function() {
+        this.position = 0;
+        this.tweenedPosition = 0;
       }
     }
   }

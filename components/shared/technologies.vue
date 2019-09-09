@@ -64,6 +64,9 @@
       isEnd() {
         return this.position <= -(this.technologies.length - this.countTechnologiesDisplayed)
       },
+      endPosition() {
+        return - (this.technologies.length - this.countTechnologiesDisplayed)
+      },
       animatedPosition() {
         return this.tweenedPosition * this.getCoefficientTranslate;
       },
@@ -91,7 +94,12 @@
     watch: {
       position: function(newValue) {
         TweenLite.to(this.$data, 0.35, { tweenedPosition: newValue });
-      }
+      },
+      endPosition: function (newValue) {
+        if (this.position < newValue && newValue <= 0) {
+          this.position = newValue;
+        }
+      },
     }
   }
 </script>
