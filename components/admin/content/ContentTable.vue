@@ -1,8 +1,12 @@
 <template lang="pug">
   .table(v-if="getCurrentTechnology")
-    i.table__navigation(class="el-icon-arrow-left")
+    i.table__navigation(
+      @click="previous"
+      class="el-icon-arrow-left"
+      :class="{'table__navigation--active': !isStart}"
+      )
     .wrapper
-      .table__content
+      .table__content(:style="{transform: `translateX(${animatedPosition}%)`}")
         .column(
           v-for="(chapter, index) in getCurrentTechnology.chapters"
           :key="index"
@@ -25,9 +29,13 @@
               )
           .column__page-creator(@click="createPage({chapterID: chapter._id})")
             span Создать страницу
-        .chapter-creator
-          span(@click="createChapter({technologyID: getCurrentTechnology._id})") Создать раздел
-    i.table__navigation(class="el-icon-arrow-right")
+        .table__chapter-creator
+          button(@click="createChapter({technologyID: getCurrentTechnology._id})") Создать раздел
+    i.table__navigation(
+      @click="next"
+      class="el-icon-arrow-right"
+      :class="{'table__navigation--active': !isEnd}"
+      )
 </template>
 
 <script>
@@ -39,7 +47,11 @@
     data() {
       return {
         technologyID: null,
-        technology: null
+        technology: null,
+        countChaptersDisplayed: 0,
+        coefficientTranslate: 0,
+        position: 0,
+        tweenedPosition: 0
       }
     },
     methods: {
@@ -57,12 +69,56 @@
       },
       removeChapter(payload) {
         this.$store.dispatch('content/removeChapter', {_id: payload._id})
+      },
+      next() {
+        if (!this.isEnd) {
+          this.position -= 1;
+        }
+      },
+      previous() {
+        if (!this.isStart) {
+          this.position += 1;
+        }
       }
     },
     computed: {
+      isStart() {
+        return this.position >= 0
+      },
+      isEnd() {
+        return this.position <= -(this.getCurrentTechnology.chapters.length - this.countChaptersDisplayed + 1)
+      },
+      getCoefficientAdaptive() {
+        return this.$store.getters['adaptive/getCoefficientAdaptive'];
+      },
       getCurrentTechnology() {
         return this.$store.getters['content/getCurrentTechnology'];
       },
+      animatedPosition() {
+        return this.tweenedPosition * this.getCoefficientTranslate;
+      },
+      getCoefficientTranslate() {
+        if (this.getCoefficientAdaptive === 6 || this.getCoefficientAdaptive === 5) {
+          this.coefficientTranslate = 33.5;
+          this.countChaptersDisplayed = 3;
+        } else if(this.getCoefficientAdaptive === 4) {
+          this.coefficientTranslate = 50;
+          this.countChaptersDisplayed = 2;
+        } else if(this.getCoefficientAdaptive === 3) {
+          this.coefficientTranslate = 50;
+          this.countChaptersDisplayed = 2;
+        } else if (this.getCoefficientAdaptive === 2 || this.getCoefficientAdaptive === 1) {
+          this.coefficientTranslate = 100;
+          this.countChaptersDisplayed = 1;
+        }
+
+        return this.coefficientTranslate;
+      }
+    },
+    watch: {
+      position: function(newValue) {
+        TweenLite.to(this.$data, 0.35, { tweenedPosition: newValue });
+      }
     }
   }
 </script>
@@ -75,9 +131,17 @@
     border-radius: 5px;
     padding: 10px;
     &__navigation {
+      padding: 1em 0;
+      align-self: center;
+      color: #a2a2a2;
       font-size: 16px;
+      font-weight: 700;
       min-width: 25px;
       text-align: center;
+      &--active {
+        cursor: pointer;
+        color: #050619;
+      }
     }
     .wrapper {
       min-width: calc(100% - 50px);
@@ -87,9 +151,8 @@
       display: flex;
       justify-content: flex-start;
 
-
       .column {
-        min-width: 33.33%;
+        min-width: 33.5%;
         &__title, &__page {
           font-size: 16px;
           display: flex;
@@ -106,7 +169,7 @@
         }
         &__title {
           font-weight: 700;
-          padding-bottom: 5px;
+          padding-bottom: .5em;
         }
         &__page {
           padding: 5px;
@@ -119,6 +182,23 @@
           span {
             font-size: 16px;
           }
+        }
+      }
+    }
+
+    &__chapter-creator {
+      min-width: 33.5%;
+      display: flex;
+      flex-direction: column;
+      button {
+        align-self: center;
+        cursor: pointer;
+        border: 1px solid #c8cddb;
+        padding: .5em 1em;
+        border-radius: 1em;
+        transition: .5s;
+        &:hover {
+          background-color: #dafcd3;
         }
       }
     }
