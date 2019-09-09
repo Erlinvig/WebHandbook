@@ -47,6 +47,7 @@
     z-index: 210;
   }
   .content {
+    margin: 2em;
     background-color: #fff;
     border-radius: 5px;
     padding: 2em;
