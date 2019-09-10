@@ -5,6 +5,5 @@ module.exports = `
     secondName: String
     login: String
     password: String
-    pages: [Page!]
   }
 `;

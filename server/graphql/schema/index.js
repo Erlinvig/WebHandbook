@@ -8,6 +8,7 @@ module.exports = buildSchema(`
   
   type RootQuery {
       technologies(technologyInput: TechnologyInput): [Technology!]!
+      users(userInput: UserInput): [User!]!
   }
   type RootMutation {
     createTechnology(technologyInput: TechnologyInput): Technology
