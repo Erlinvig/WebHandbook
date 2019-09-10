@@ -7,7 +7,7 @@
             nuxt-link.navigation__link(to="/") Главная
         ul
           li
-            nuxt-link.navigation__link.navigation__link--right(to="/") Вход
+            nuxt-link.navigation__link.navigation__link--right(to="/signin") Вход
 </template>
 
 <script>
