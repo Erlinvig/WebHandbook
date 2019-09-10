@@ -1,14 +1,71 @@
 <template lang="pug">
   .container
-    .auth-wrapper.mt2
+    form.auth-wrapper.mt2(@submit="onSubmit" :model="form")
       h1.title.mb1 Вход в систему
-      input.field.mb1(placeholder="Введите логин")
-      input.field.mb1(placeholder="Введите пароль" type="password")
-      button.signin.mb1
+      label.error(for="login-form" v-if="errorLogin") Введите логин!
+      input.field.mb1(
+        id="login-form"
+        placeholder="Введите логин"
+        v-model="form.login"
+        )
+      label.error(for="password-form" v-if="errorPassword") Введите пароль!
+      input.field.mb1(
+        id="password-form"
+        placeholder="Введите пароль"
+        type="password"
+        v-model="form.password"
+        )
+      button.signin.mb1(type="submit")
         i.el-icon-unlock
         span Войти
       nuxt-link.signup(to="signup") Нет аккаунта?
 </template>
+
+<script>
+  import { required } from 'vuelidate/lib/validators'
+
+  export default {
+    data() {
+      return {
+        form: {
+          login: null,
+          password: null
+        }
+      }
+    },
+    validations: {
+      form: {
+        login: {
+          required
+        },
+        password: {
+          required
+        }
+      }
+    },
+    methods: {
+      onSubmit(e) {
+        e.preventDefault();
+        this.$v.form.$touch();
+
+        const formData = {
+          login: this.form.login,
+          password: this.form.password
+        };
+
+        console.log(formData)
+      }
+    },
+    computed: {
+      errorLogin() {
+        return this.$v.form.login.$error
+      },
+      errorPassword() {
+        return this.$v.form.password.$error
+      }
+    }
+  }
+</script>
 
 <style lang="scss" scoped>
   .auth-wrapper {
@@ -21,6 +78,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    .error {
+      color: red;
+      margin-bottom: .5em;
+    }
     .title {
       font-size: 20px;
       text-align: center;
