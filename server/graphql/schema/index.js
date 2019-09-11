@@ -19,6 +19,10 @@ module.exports = buildSchema(`
     
     createPage(pageInput: PageInput): Page
     removePage(pageInput: PageInput): Page
+    
+    signin(userInput: UserInput): User
+    signup(userInput: UserInput): User
+    removeUser(userInput: UserInput): User
   }
   schema {
       query: RootQuery
