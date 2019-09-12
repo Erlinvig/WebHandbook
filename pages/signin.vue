@@ -1,6 +1,9 @@
 <template lang="pug">
   .container
     form.auth-wrapper.mt2(@submit="onSubmit" :model="form")
+      .error-server.mb1(v-if="error")
+        i.el-icon-warning
+        span {{error}}
       h1.title.mb1 Вход в систему
       label.error(for="login-form" v-if="errorLogin") Введите логин!
       input.field.mb1(
@@ -27,6 +30,7 @@
   export default {
     data() {
       return {
+        errorServer: null,
         form: {
           login: null,
           password: null
@@ -44,19 +48,29 @@
       }
     },
     methods: {
-      onSubmit(e) {
+      async onSubmit(e) {
         e.preventDefault();
         this.$v.form.$touch();
 
-        const formData = {
-          login: this.form.login,
-          password: this.form.password
-        };
+        if (!this.$v.form.$error) {
+          const formData = {
+            login: this.form.login,
+            password: this.form.password
+          };
 
-        console.log(formData)
+          const result = await this.$store.dispatch('auth/signin', formData);
+
+          if (result.error) {
+            console.log(result);
+            this.errorServer = result.error;
+          }
+        }
       }
     },
     computed: {
+      error() {
+        return this.errorServer;
+      },
       errorLogin() {
         return this.$v.form.login.$error
       },
@@ -81,6 +95,22 @@
     .error {
       color: red;
       margin-bottom: .5em;
+    }
+    .error-server {
+      text-align: center;
+      border-bottom: 1px solid #b93434;
+      padding: .5em;
+      background: #fdf5b6;
+      i, span {
+        font-size: 18px;
+        color: #b93434;
+      }
+      span {
+        font-weight: 600;
+      }
+      i {
+        margin-right: .5em;
+      }
     }
     .title {
       font-size: 20px;

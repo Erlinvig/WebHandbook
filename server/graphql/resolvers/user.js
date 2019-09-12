@@ -1,10 +1,35 @@
 const Page = require('../../models/pages');
 const User = require('../../models/users');
 const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   users() {},
-  signin: async args => {},
+  signin: async args => {
+    const candidate = await User.findOne({login: args.userInput.login});
+
+    if (await candidate) {
+      const isPasswordCorrect = bcrypt.compareSync(args.userInput.password, candidate.password);
+
+      if (isPasswordCorrect) {
+        const token = jwt.sign({
+          login: candidate.login,
+          userId: candidate._id
+        }, 'Token');
+        return {
+          token,
+          _id: candidate._id,
+          login: candidate.login,
+          firstName: candidate.firstName,
+          secondName: candidate.secondName
+        }
+      } else {
+        throw new Error('Не верный пароль или логин!');
+      }
+    } else {
+      throw new Error('Не верный пароль или логин!')
+    }
+  },
   signup: async args => {
     const candidate = await User.findOne({login: args.userInput.login});
 

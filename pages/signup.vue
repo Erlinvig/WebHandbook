@@ -78,7 +78,7 @@
   export default {
     data() {
       return {
-        errorServer: '',
+        errorServer: null,
         form: {
           firstName: null,
           secondName: null,

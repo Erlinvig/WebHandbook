@@ -20,7 +20,7 @@ module.exports = buildSchema(`
     createPage(pageInput: PageInput): Page
     removePage(pageInput: PageInput): Page
     
-    signin(userInput: UserInput): User
+    signin(userInput: UserInput): AuthData
     signup(userInput: UserInput): User
     removeUser(userInput: UserInput): User
   }

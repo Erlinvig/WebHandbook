@@ -11,5 +11,21 @@ module.exports = {
       }
     }
     `
+  },
+  signin(payload) {
+    return `
+    mutation {
+      signin(userInput: 
+      {
+        login: "${payload.login}", 
+        password: "${payload.password}"}) {
+        _id
+        firstName
+        secondName
+        login
+        token
+      }
+    }
+    `
   }
 };
