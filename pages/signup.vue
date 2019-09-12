@@ -109,14 +109,18 @@
         e.preventDefault();
         this.$v.form.$touch();
 
-        const formData = {
-          firstName: this.form.firstName,
-          secondName: this.form.secondName,
-          login: this.form.login,
-          password: this.form.password
-        };
+        if (!this.$v.form.$error) {
+          const formData = {
+            firstName: this.form.firstName,
+            secondName: this.form.secondName,
+            login: this.form.login,
+            password: this.form.password
+          };
 
-        console.log(formData)
+          this.$store.dispatch('auth/signup', formData)
+        }
+
+
       }
     },
     computed: {
