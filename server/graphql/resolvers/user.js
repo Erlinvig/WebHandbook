@@ -9,7 +9,7 @@ module.exports = {
     const candidate = await User.findOne({login: args.userInput.login});
 
     if (candidate) {
-      return 'Логин занят!'
+      throw new Error('Логин занят!')
     } else {
       const salt = bcrypt.genSaltSync(10);
 
@@ -21,7 +21,8 @@ module.exports = {
       });
 
       try {
-        user.save();
+        await user.save();
+        return await user;
       } catch (e) {
         throw e
       }

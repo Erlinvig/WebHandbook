@@ -12,6 +12,8 @@ export const actions = {
       query: query
     });
 
-    console.log(result)
+    if (result.errors[0].message === 'Логин занят!') {
+      return {error: result.errors[0].message}
+    }
   }
 };

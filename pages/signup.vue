@@ -1,6 +1,9 @@
 <template lang="pug">
   .container
     form.auth-wrapper.mt2(:model="form" @submit="onSubmit")
+      .error-server.mb1(v-if="error")
+        i.el-icon-warning
+        span {{error}}
       h1.title.mb1 Регистрация
       span.mb1 Как к Вам обращаться?
       .FI-box
@@ -75,6 +78,7 @@
   export default {
     data() {
       return {
+        errorServer: '',
         form: {
           firstName: null,
           secondName: null,
@@ -105,7 +109,7 @@
       }
     },
     methods: {
-      onSubmit(e) {
+      async onSubmit(e) {
         e.preventDefault();
         this.$v.form.$touch();
 
@@ -117,13 +121,18 @@
             password: this.form.password
           };
 
-          this.$store.dispatch('auth/signup', formData)
+          const result = await this.$store.dispatch('auth/signup', formData);
+
+          if (result.error) {
+            this.errorServer = result.error;
+          }
         }
-
-
       }
     },
     computed: {
+      error() {
+        return this.errorServer;
+      },
       errorFirstName() {
         return this.$v.form.firstName.$error
       },
@@ -173,6 +182,23 @@
     .error {
       color: red;
       margin-bottom: .5em;
+    }
+
+    .error-server {
+      text-align: center;
+      border-bottom: 1px solid #b93434;
+      padding: .5em;
+      background: #fdf5b6;
+      i, span {
+        font-size: 18px;
+        color: #b93434;
+      }
+      span {
+        font-weight: 600;
+      }
+      i {
+        margin-right: .5em;
+      }
     }
 
     .FI-box, .password-box {
