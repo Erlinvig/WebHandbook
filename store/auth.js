@@ -51,7 +51,7 @@ export const actions = {
     return result.data.getUserByToken
   },
 
-  async signup({}, payload) {
+  async signup({commit, dispatch}, payload) {
     const query = queryAuth.signup(payload);
 
     const result = await this.$axios.$post('/graphql?', {
@@ -63,6 +63,11 @@ export const actions = {
         return {error: result.errors[0].message}
       }
     } else {
+      const token = result.data.signup.token;
+      Cookies.set('jwt-token', token);
+      const user = await dispatch('getUserByToken', {token});
+
+      commit('setCurrentUser', {user});
       return {
         error: null,
         isUser: true
