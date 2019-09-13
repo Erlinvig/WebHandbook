@@ -1,7 +1,9 @@
 <template lang="pug">
   .container
-
-    form.auth-wrapper.mt2(@submit="onSubmit" :model="form" v-if="authState === 'default'")
+    .spinner-wrapper.auth-wrapper.mt2(v-if="authState === authOption.loading")
+      h1.title.mb1 Вход в систему
+      spinner.spinner-wrapper__spinner
+    form.auth-wrapper.mt2(@submit="onSubmit" :model="form" v-if="authState === authOption.default")
       .error-server.mb1(v-if="error")
         i.el-icon-warning
         span {{error}}
@@ -27,10 +29,19 @@
 
 <script>
   import { required } from 'vuelidate/lib/validators'
+  import spinner from '~/components/shared/tools/spinner'
 
   export default {
+    components: {
+      spinner
+    },
     data() {
       return {
+        authOption: {
+          default: 'default',
+          loading: 'loading',
+          success: 'success'
+        },
         authState: 'default',
         errorServer: null,
         form: {
@@ -59,18 +70,17 @@
             login: this.form.login,
             password: this.form.password
           };
-          this.authState = 'in process';
+          this.authState = this.authOption.loading;
           const result = await this.$store.dispatch('auth/signin', formData);
 
           if (result.error) {
             this.errorServer = result.error;
-            this.authState = 'default';
+            this.authState = this.authOption.default;
           }
 
           if (result.isUser) {
             this.errorServer = null;
             this.$router.replace({ path: '/' });
-            //this.authState = 'default';
           }
         }
       }
@@ -90,6 +100,11 @@
 </script>
 
 <style lang="scss" scoped>
+  .spinner-wrapper {
+    &__spinner {
+      margin: 1em auto;
+    }
+  }
   .auth-wrapper {
     border: 1px solid #cacaca;
     border-radius: 1em;

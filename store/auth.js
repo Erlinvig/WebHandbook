@@ -63,7 +63,10 @@ export const actions = {
         return {error: result.errors[0].message}
       }
     } else {
-      return {error: null}
+      return {
+        error: null,
+        isUser: true
+      }
     }
   }
 };

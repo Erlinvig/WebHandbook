@@ -1,6 +1,9 @@
 <template lang="pug">
   .container
-    form.auth-wrapper.mt2(:model="form" @submit="onSubmit")
+    .spinner-wrapper.auth-wrapper.mt2(v-if="authState === authOption.loading")
+      h1.title.mb1 Регистрация
+      spinner.spinner-wrapper__spinner
+    form.auth-wrapper.mt2(:model="form" @submit="onSubmit" v-if="authState === authOption.default")
       .error-server.mb1(v-if="error")
         i.el-icon-warning
         span {{error}}
@@ -70,14 +73,28 @@
         i.el-icon-unlock
         span Зарегигистрироваться
       nuxt-link.signin(to="signin") Есть аккаунт?
+    .success-wrapper.auth-wrapper.mt2(v-if="authState === authOption.success")
+      i.el-icon-circle-check.success-icon
+      h1.title.mb1.mt1 Регистрация пройдена успешно
+      nuxt-link.profile(to="signin") Войти в личный кабинет
 </template>
 
 <script>
   import { required, minLength, sameAs } from 'vuelidate/lib/validators'
+  import spinner from '~/components/shared/tools/spinner'
 
   export default {
+    components: {
+      spinner
+    },
     data() {
       return {
+        authOption: {
+          default: 'default',
+          loading: 'loading',
+          success: 'success'
+        },
+        authState: 'default',
         errorServer: null,
         form: {
           firstName: null,
@@ -121,10 +138,17 @@
             password: this.form.password
           };
 
+          this.authState = this.authOption.loading;
           const result = await this.$store.dispatch('auth/signup', formData);
 
           if (result.error) {
             this.errorServer = result.error;
+            this.authState = this.authOption.default;
+          }
+
+          if (result.isUser) {
+            this.errorServer = null;
+            this.authState = this.authOption.success;
           }
         }
       }
@@ -165,6 +189,27 @@
 </script>
 
 <style lang="scss" scoped>
+  .spinner-wrapper {
+    &__spinner {
+      margin: 1em auto;
+    }
+  }
+  .success-wrapper {
+    .success-icon {
+      margin: 0 auto;
+      font-size: 120px;
+      color: #22bd22;
+    }
+    .profile {
+      text-align: center;
+      color: blue;
+      font-size: 16px;
+
+      &:hover {
+        color: darkblue;
+      }
+    }
+  }
   .mt23px {
     margin-top: 23px;
   }
