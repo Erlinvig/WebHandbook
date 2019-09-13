@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import TechnologiesPanel from '~/components/shared/technologies.vue'
+import TechnologiesPanel from '~/components/shared/panels/technologies/index.vue'
 import TechnologyContent from '~/components/main/content.vue'
 
 export default {

@@ -10,7 +10,7 @@
 <script>
   import navigation from '../components/navigation'
   import AdminMenu from '../components/admin/AdminMenu'
-  import DialogWindow from '../components/shared/DialogWindow'
+  import DialogWindow from '../components/shared/tools/DialogWindow'
 
   export default {
     components: {
