@@ -21,7 +21,9 @@
         this.$store.dispatch('adaptive/setOptions', {widthWindow: document.documentElement.clientWidth})
       }
     },
-    mounted() {
+    async mounted() {
+      await this.$store.dispatch('auth/autoSignin');
+
       window.addEventListener('resize', this.getWindowWidth);
       this.getWindowWidth();
     }

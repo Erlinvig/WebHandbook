@@ -41,6 +41,20 @@ export const actions = {
     }
   },
 
+  async autoSignin({commit, dispatch}) {
+    const cookieStr = process.browser
+      ? document.cookie
+      : this.app.context.req.headers.cookie;
+
+    const cookies = Cookie.parse(cookieStr || '') || {};
+    const token = cookies['jwt-token'];
+
+    if (token) {
+      const user = await dispatch('getUserByToken', {token});
+      commit('setCurrentUser', {user});
+    }
+  },
+
   async getUserByToken({}, payload) {
     const query = queryAuth.getUserByToken(payload);
 
