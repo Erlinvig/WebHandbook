@@ -8,15 +8,15 @@ export const state = () => ({
 
 export const mutations = {
   setCurrentUser(state, payload) {
-    state.user = payload
+    state.user = payload.user
   },
-  clearToken(state) {
+  clearCurrentUser(state) {
     state.user = null;
   }
 };
 
 export const actions = {
-  async signin({commit}, payload) {
+  async signin({commit, dispatch}, payload) {
     const query = queryAuth.signin(payload);
 
     const result = await this.$axios.$post('/graphql?', {
@@ -28,12 +28,27 @@ export const actions = {
         return {error: result.errors[0].message}
       }
     } else {
-      const user = result.data.signin;
-      Cookies.set('jwt-token', user);
-      commit('setCurrentUser', user);
+      const token = result.data.signin.token;
+      Cookies.set('jwt-token', token);
+      const user = await dispatch('getUserByToken', {token});
 
-      return {error: null}
+      commit('setCurrentUser', {user});
+
+      return {
+        error: null,
+        isUser: true
+      }
     }
+  },
+
+  async getUserByToken({}, payload) {
+    const query = queryAuth.getUserByToken(payload);
+
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+
+    return result.data.getUserByToken
   },
 
   async signup({}, payload) {

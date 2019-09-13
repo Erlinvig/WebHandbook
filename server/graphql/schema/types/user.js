@@ -6,6 +6,7 @@ type User {
   login: String
   password: String
   status: String
+  token: String
   pages: [Page]
 }
 `;

@@ -9,6 +9,7 @@ module.exports = buildSchema(`
   type RootQuery {
       technologies(technologyInput: TechnologyInput): [Technology!]!
       users(userInput: UserInput): [User!]!
+      getUserByToken(userInput: UserInput): User
   }
   type RootMutation {
     createTechnology(technologyInput: TechnologyInput): Technology
@@ -20,7 +21,7 @@ module.exports = buildSchema(`
     createPage(pageInput: PageInput): Page
     removePage(pageInput: PageInput): Page
     
-    signin(userInput: UserInput): AuthData
+    signin(userInput: UserInput): User
     signup(userInput: UserInput): User
     removeUser(userInput: UserInput): User
   }

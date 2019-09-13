@@ -6,5 +6,6 @@ module.exports = `
     login: String
     password: String
     status: String
+    token: String
   }
 `;

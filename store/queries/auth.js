@@ -12,6 +12,18 @@ module.exports = {
     }
     `
   },
+  getUserByToken(payload) {
+    return `
+    query {
+      getUserByToken(userInput: {token: "${payload.token}"}) {
+        _id
+        firstName
+        secondName
+        login
+        status
+      }
+    }`
+  },
   signin(payload) {
     return `
     mutation {
@@ -19,13 +31,10 @@ module.exports = {
       {
         login: "${payload.login}", 
         password: "${payload.password}"}) {
-        _id
-        firstName
-        secondName
-        login
         token
       }
     }
     `
   }
 };
+

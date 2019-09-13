@@ -16,6 +16,10 @@ module.exports = {
           login: candidate.login,
           userId: candidate._id
         }, 'Token');
+
+        candidate.token = token;
+        candidate.save();
+
         return {
           token,
           _id: candidate._id,
@@ -30,6 +34,17 @@ module.exports = {
       throw new Error('Не верный пароль или логин!')
     }
   },
+
+  getUserByToken: async args => {
+    const user = await User.findOne({token: args.userInput.token});
+
+    if (user) {
+      return user;
+    } else {
+      throw new Error("Пользователь не найден")
+    }
+  },
+
   signup: async args => {
     const candidate = await User.findOne({login: args.userInput.login});
 
@@ -38,11 +53,17 @@ module.exports = {
     } else {
       const salt = bcrypt.genSaltSync(10);
 
+      const token = jwt.sign({
+        login: args.userInput.login,
+        userId: args.userInput._id
+      }, 'q11werty51');
+
       const user = new User({
         firstName: args.userInput.firstName,
         secondName: args.userInput.secondName,
         login: args.userInput.login,
-        password: bcrypt.hashSync(args.userInput.password, salt)
+        password: bcrypt.hashSync(args.userInput.password, salt),
+        token
       });
 
       try {

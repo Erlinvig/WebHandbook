@@ -1,6 +1,7 @@
 <template lang="pug">
   .container
-    form.auth-wrapper.mt2(@submit="onSubmit" :model="form")
+
+    form.auth-wrapper.mt2(@submit="onSubmit" :model="form" v-if="authState === 'default'")
       .error-server.mb1(v-if="error")
         i.el-icon-warning
         span {{error}}
@@ -30,6 +31,7 @@
   export default {
     data() {
       return {
+        authState: 'default',
         errorServer: null,
         form: {
           login: null,
@@ -57,12 +59,18 @@
             login: this.form.login,
             password: this.form.password
           };
-
+          this.authState = 'in process';
           const result = await this.$store.dispatch('auth/signin', formData);
 
           if (result.error) {
-            console.log(result);
             this.errorServer = result.error;
+            this.authState = 'default';
+          }
+
+          if (result.isUser) {
+            this.errorServer = null;
+            this.$router.replace({ path: '/' });
+            //this.authState = 'default';
           }
         }
       }

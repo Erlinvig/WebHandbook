@@ -24,6 +24,10 @@ const userSchema = new Schema({
     type: String,
     default: 'user'
   },
+  token: {
+    type: String,
+    default: ''
+  },
   pages: [
     {
       type: Schema.Types.ObjectId,
