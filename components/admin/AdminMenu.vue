@@ -17,6 +17,12 @@
           )
           i.el-icon-user-solid.admin-menu__link__icon
           span.admin-menu__link__name Пользователи
+      li
+        nuxt-link.admin-menu__link(
+          to="../signout"
+        )
+          i.el-icon-switch-button.admin-menu__link__icon
+          span.admin-menu__link__name Выход
 </template>
 
 <script>
