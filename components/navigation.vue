@@ -108,7 +108,6 @@
             &:hover {
               background-color: #ececec;
             }
-
           }
         }
       }

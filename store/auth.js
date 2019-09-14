@@ -87,6 +87,10 @@ export const actions = {
         isUser: true
       }
     }
+  },
+  signout({commit}) {
+    Cookies.remove('jwt-token');
+    commit('clearCurrentUser');
   }
 };
 
