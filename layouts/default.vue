@@ -7,6 +7,9 @@
 <script>
   import navigation from '../components/navigation'
   export default {
+    middleware: [
+      'autoSignin'
+    ],
     components: {
       navigation
     },
@@ -22,8 +25,6 @@
       }
     },
     async mounted() {
-      await this.$store.dispatch('auth/autoSignin');
-
       window.addEventListener('resize', this.getWindowWidth);
       this.getWindowWidth();
     }

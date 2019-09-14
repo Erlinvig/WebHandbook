@@ -52,6 +52,8 @@ export const actions = {
     if (token) {
       const user = await dispatch('getUserByToken', {token});
       commit('setCurrentUser', {user});
+    } else {
+      commit('clearCurrentUser');
     }
   },
 

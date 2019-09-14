@@ -13,6 +13,10 @@
   import DialogWindow from '../components/shared/tools/DialogWindow'
 
   export default {
+    middleware: [
+      'autoSignin',
+      'access'
+    ],
     components: {
       navigation,
       AdminMenu,
