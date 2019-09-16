@@ -8,10 +8,12 @@
 <script>
   import notification from './notification'
   import confirmation from './confirmation'
+  import TechnologySetting from './TechnologySetting'
   export default {
     components: {
       notification,
-      confirmation
+      confirmation,
+      TechnologySetting
     },
     data() {
       return {

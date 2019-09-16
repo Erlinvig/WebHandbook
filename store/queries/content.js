@@ -36,6 +36,15 @@ module.exports = {
     }
     `
   },
+  removeTechnology(payload) {
+    return `
+      mutation {
+        removeTechnology(technologyInput: {_id: "${payload._id}"}) {
+          _id
+        }
+      }
+    `
+  },
   createPage(payload) {
     return `
       mutation {

@@ -12,6 +12,10 @@
             @click="[setActiveTechnologyID(technology._id), setNewCurrentTechnology(technology._id)]"
           )
             span {{technology.title}}
+            i.el-icon-setting(
+              v-if="payload.location === 'admin'"
+              @click.stop="openSettingTechnology({_id: technology._id, title: technology.title})"
+            )
           li.technologies__item.creator(
             v-if="payload.location === 'admin'"
             @click="prepareCreateTechnology"
@@ -59,6 +63,9 @@
       }
     },
     methods: {
+      openSettingTechnology(payload) {
+        this.$store.dispatch('dialog/open', {type: 'technology-setting', ...payload});
+      },
       prepareCreateTechnology() {
         if (this.newTechnologyState === this.newTechnologyStateOption.default) {
           this.newTechnologyState = this.newTechnologyStateOption.filling;
@@ -235,6 +242,13 @@
       min-width: 23%;
       display: flex;
       justify-content: center;
+      i {
+        margin-left: .5em;
+        transition: .35s;
+        &:hover {
+          color: #7c99db;
+        }
+      }
     }
 
     &__item--active {
