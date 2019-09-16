@@ -36,6 +36,16 @@ module.exports = {
     }
     `
   },
+  changeTechnologyTitle(payload) {
+    return `
+    mutation {
+      changeTechnologyTitle(technologyInput: {_id: "${payload._id}", title: "${payload.title}"}) {
+        _id
+        title
+      }
+    }
+    `
+  },
   removeTechnology(payload) {
     return `
       mutation {

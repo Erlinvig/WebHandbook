@@ -6,7 +6,7 @@
       .settings__loading(v-if="stateDialog === stateDialogOption.loading")
         i.el-icon-loading
       .settings__newTitle(v-if="stateDialog === stateDialogOption.default")
-        input(placeholder="Новое название")
+        input(placeholder="Новое название" v-model="newTitle")
     .confirmation-wrapper__actions
       button(@click="removeTechnology") Удалить
       button(@click="close") Отмена
@@ -19,6 +19,7 @@
     data() {
       return {
         stateDialog: 'default',
+        newTitle: '',
         stateDialogOption: {
           default: 'default',
           loading: 'loading'
@@ -36,9 +37,12 @@
       close() {
         this.$store.dispatch('dialog/close')
       },
-      ok() {
-        this.$store.dispatch(this.payload.actionOK, this.payload.actionOKPayload);
-        this.close();
+      async ok() {
+        if (this.stateDialog === this.stateDialogOption.default) {
+          this.stateDialog = this.stateDialogOption.loading;
+          await this.$store.dispatch('content/changeTechnologyTitle', {_id: this.payload._id, title: this.newTitle});
+          this.close();
+        }
       }
     }
   }

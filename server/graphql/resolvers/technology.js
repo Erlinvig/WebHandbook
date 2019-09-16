@@ -32,7 +32,7 @@ module.exports = {
     };
 
     try {
-      return await Technology.findOneAndUpdate({_id: args.technologyInput._id}, {useFindAndModify: false});
+      return await Technology.findOneAndUpdate({_id: args.technologyInput._id}, $set);
     } catch (e) {
       throw e
     }

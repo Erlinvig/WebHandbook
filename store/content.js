@@ -65,6 +65,15 @@ export const actions = {
     await dispatch('getTechnologies');
   },
 
+  async changeTechnologyTitle({commit, dispatch}, payload) {
+    const query = queryContent.changeTechnologyTitle(payload);
+
+    await this.$axios.$post('/graphql?', {
+      query: query
+    });
+    await dispatch('getTechnologies');
+  },
+
   async removeTechnology({commit, dispatch}, payload) {
     const query = queryContent.removeTechnology(payload);
 
