@@ -1,6 +1,6 @@
 <template lang="pug">
   .wrapper-content
-    technologies-panel(v-if="technologies" :payload="{technologies, location: 'admin'}")
+    technologies-panel(v-if="technologies" :payload="{technologies: getTechnologyList, location: 'admin'}")
     technology-content(v-if="technology")
 </template>
 
@@ -15,7 +15,8 @@
       TechnologyContent
     },
     async mounted() {
-      this.technologies = await this.$store.dispatch('content/getTechnologies');
+      await this.$store.dispatch('content/getTechnologies');
+      this.technologies = await this.$store.getters['content/getTechnologyList'];
       if (!this.$route.query.technologyID) {
         this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: this.technologies[0]._id});
         this.$router.push({query: {technologyID: this.technologies[0]._id}});
@@ -34,6 +35,11 @@
         technology: null
       }
     },
+    computed: {
+      getTechnologyList() {
+        return this.$store.getters['content/getTechnologyList'];
+      }
+    }
   }
 </script>
 

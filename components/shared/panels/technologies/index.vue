@@ -6,11 +6,30 @@
       li.technologies__main
         ul.technologies__list(:style="{transform: `translateX(${animatedPosition}%)`}")
           li.technologies__item(
-            v-for="(technology, index) in technologies"
+            v-for="(technology, index) in getTechnologyList"
             :key="index"
             :class="{'technologies__item--active': isActive(technology._id)}"
             @click="[setActiveTechnologyID(technology._id), setNewCurrentTechnology(technology._id)]"
-          ) {{technology.title}}
+          )
+            span {{technology.title}}
+          li.technologies__item.creator(
+            v-if="payload.location === 'admin'"
+            @click="prepareCreateTechnology"
+          )
+            i.el-icon-plus.creator__prepare(
+              v-if="newTechnologyState === newTechnologyStateOption.default"
+              )
+            .creator__filling(v-if="newTechnologyState === newTechnologyStateOption.filling")
+              i.el-icon-close.creator__filling__close(
+                @click="closeCreateTechnology"
+              )
+              input.creator__filling__field(placeholder="Название" v-model="newTechnologyTitle")
+              i.el-icon-circle-check.creator__filling__add(
+                @click="createTechnology({title: newTechnologyTitle})"
+              )
+            i.el-icon-loading.creator__filling__loading(
+              v-if="newTechnologyState === newTechnologyStateOption.loading"
+            )
       li.technologies__right(@click="next")
         i(class="el-icon-arrow-right" :class="{'technologies__right--active': !isEnd}")
 </template>
@@ -25,6 +44,13 @@
     },
     data() {
       return {
+        newTechnologyTitle: '',
+        newTechnologyState: 'default',
+        newTechnologyStateOption: {
+          default: 'default',
+          filling: 'filling',
+          loading: 'loading'
+        },
         coefficientTranslate: 0,
         countTechnologiesDisplayed: 0,
         position: 0,
@@ -33,6 +59,26 @@
       }
     },
     methods: {
+      prepareCreateTechnology() {
+        if (this.newTechnologyState === this.newTechnologyStateOption.default) {
+          this.newTechnologyState = this.newTechnologyStateOption.filling;
+        }
+      },
+      closeCreateTechnology() {
+        setTimeout(() => {
+          this.newTechnologyState = this.newTechnologyStateOption.default;
+          this.newTechnologyTitle = '';
+        }, 0)
+
+      },
+      async createTechnology(payload) {
+        if (payload.title) {
+          this.newTechnologyState = this.newTechnologyStateOption.loading;
+          await this.$store.dispatch('content/createTechnology', {title: payload.title});
+          this.newTechnologyState = this.newTechnologyStateOption.default;
+          this.newTechnologyTitle = '';
+        }
+      },
       setActiveTechnologyID(id) {
         this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: id});
         this.$router.push({query: {technologyID: id}})
@@ -55,6 +101,9 @@
       }
     },
     computed: {
+      getTechnologyList() {
+        return this.payload.technologies;
+      },
       getActiveTechnologyId() {
         return this.$store.getters['content/getActiveTechnologyId']
       },
@@ -62,10 +111,12 @@
         return this.position >= 0
       },
       isEnd() {
-        return this.position <= -(this.technologies.length - this.countTechnologiesDisplayed)
+        let plus = this.payload.location === 'admin' ? 1 : 0;
+        return this.position <= -(this.getTechnologyList.length - this.countTechnologiesDisplayed + plus)
       },
       endPosition() {
-        return - (this.technologies.length - this.countTechnologiesDisplayed)
+        let plus = this.payload.location === 'admin' ? 1 : 0;
+        return - (this.getTechnologyList.length - this.countTechnologiesDisplayed + plus)
       },
       animatedPosition() {
         return this.tweenedPosition * this.getCoefficientTranslate;
@@ -126,11 +177,55 @@
       padding: 1em 0;
       background-color: #fff;
       font-size: 22px;
-      font-weight: 700;
       border-radius: 5px;
       margin: 0 1%;
+      span, i {
+        font-size: 22px;
+        font-weight: 700;
+        align-self: center;
+      }
     }
+    .creator {
+      &__prepare {
+        transition: .35s;
+        &:hover {
+          color: blue;
+        }
+      }
+      &__filling {
+        &__loading {
+          color: blue;
+        }
+        width: 90%;
+        display: flex;
+        justify-content: space-between;
+        span, i {
+          font-size: 22px;
+          font-weight: 700;
+          align-self: center;
+        }
+        &__field {
+          font-size: 20px;
+          width: 75%;
+          text-align: center;
+        }
+        &__close {
+          transition: .35s;
+          color: #7f0000;
+          &:hover {
+            color: red;
+          }
+        }
+        &__add {
+          transition: .35s;
+          color: green;
+          &:hover {
+            color: #00e500;
+          }
+        }
+      }
 
+    }
     &__left--active, &__right--active {
       color: #050619;
     }

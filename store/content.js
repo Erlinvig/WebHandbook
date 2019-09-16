@@ -2,7 +2,8 @@ import queryContent from './queries/content'
 
 export const state = () => ({
   activeTechnologyID: null,
-  currentTechnology: null
+  currentTechnology: null,
+  technologyList: null
 });
 
 export const mutations = {
@@ -14,8 +15,9 @@ export const mutations = {
       chapter.isOpen = false;
     });
     state.currentTechnology = payload.technology;
-
-
+  },
+  setTechnologyList(state, payload) {
+    state.technologyList = payload.technologyList
   },
   openChapter(state, payload) {
     state.currentTechnology.chapters.find(chapter => {
@@ -42,7 +44,8 @@ export const actions = {
     const result = await this.$axios.$post('/graphql', {
       query: query
     });
-    return result.data.technologies
+    commit('setTechnologyList', {technologyList: result.data.technologies});
+    //return result.data.technologies
   },
 
   async setTechnologyById({commit}, payload) {
@@ -51,6 +54,15 @@ export const actions = {
       query: query
     });
     commit('setCurrentTechnology', {technology: result.data.technologies[0]});
+  },
+
+  async createTechnology({commit, dispatch}, payload) {
+    const query = queryContent.createTechnology(payload);
+
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+    await dispatch('getTechnologies');
   },
 
   async createPage({commit, state, dispatch}, payload) {
@@ -100,6 +112,7 @@ export const getters = {
   getActiveTechnologyId: state => state.activeTechnologyID,
   getTechnologies: state => state.activeTechnologyID,
   getCurrentTechnology: state => state.currentTechnology,
+  getTechnologyList: state => state.technologyList,
 
   getChapter: state => payload => {
     return state.currentTechnology.chapters.find(chapter => chapter._id === payload.id)

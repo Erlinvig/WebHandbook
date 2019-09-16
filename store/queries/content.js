@@ -27,6 +27,15 @@ module.exports = {
         }
       `
   },
+  createTechnology(payload) {
+    return `
+    mutation {
+      createTechnology(technologyInput: {title: "${payload.title}"}) {
+        _id
+      }
+    }
+    `
+  },
   createPage(payload) {
     return `
       mutation {

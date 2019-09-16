@@ -1,6 +1,6 @@
 <template lang="pug">
   .page
-    technologies-panel(v-if="technologies" :payload="{technologies, location: 'main'}")
+    technologies-panel(v-if="technologies" :payload="{technologies: getTechnologyList, location: 'main'}")
     technology-content
 </template>
 
@@ -14,7 +14,8 @@ export default {
     TechnologyContent
   },
   async mounted() {
-    this.technologies = await this.$store.dispatch('content/getTechnologies');
+    await this.$store.dispatch('content/getTechnologies');
+    this.technologies = await this.$store.getters['content/getTechnologyList'];
     if (!this.$route.query.technologyID) {
       this.$store.dispatch('content/setActiveTechnologyId', {activeTechnologyID: this.technologies[0]._id});
       this.$router.push({query: {technologyID: this.technologies[0]._id}});
@@ -33,6 +34,9 @@ export default {
     }
   },
   computed: {
+    getTechnologyList() {
+      return this.$store.getters['content/getTechnologyList'];
+    },
     getCurrentTechnology() {
       this.technology = this.$store.getters['content/getCurrentTechnology']
     }
