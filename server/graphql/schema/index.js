@@ -13,9 +13,11 @@ module.exports = buildSchema(`
   }
   type RootMutation {
     createTechnology(technologyInput: TechnologyInput): Technology
+    changeTechnologyTitle(technologyInput: TechnologyInput): Technology
     removeTechnology(technologyInput: TechnologyInput): Technology
     
     createChapter(chapterInput: ChapterInput): Chapter
+    changeChapterTitle(chapterInput: ChapterInput): Chapter
     removeChapter(chapterInput: ChapterInput): Chapter
     
     createPage(pageInput: PageInput): Page

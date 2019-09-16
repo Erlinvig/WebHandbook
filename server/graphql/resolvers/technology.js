@@ -26,6 +26,17 @@ module.exports = {
       throw e
     }
   },
+  changeTechnologyTitle: async args => {
+    const $set = {
+      title: args.technologyInput.title
+    };
+
+    try {
+      return await Technology.findOneAndUpdate({_id: args.technologyInput._id}, {useFindAndModify: false});
+    } catch (e) {
+      throw e
+    }
+  },
   removeTechnology: async args => {
     try {
       await Technology.deleteOne({_id: args.technologyInput._id});

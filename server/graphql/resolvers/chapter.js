@@ -22,6 +22,17 @@ module.exports = {
       throw e
     }
   },
+  changeChapterTitle: async args => {
+    const $set = {
+      title: args.chapterInput.title
+    };
+
+    try {
+      return await Chapter.findOneAndUpdate({_id: args.chapterInput._id}, $set, {useFindAndModify: false});
+    } catch (e) {
+      throw e
+    }
+  },
   removeChapter: async args => {
     try {
       const chapter = await Chapter.findOne({_id: args.chapterInput._id});
