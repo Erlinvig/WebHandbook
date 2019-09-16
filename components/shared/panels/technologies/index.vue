@@ -125,13 +125,13 @@
         return this.$store.getters['adaptive/getCoefficientAdaptive'];
       },
       getCoefficientTranslate() {
-        if (this.getCoefficientAdaptive === 6 || this.getCoefficientAdaptive === 5) {
+        if (this.getCoefficientAdaptive === 6) {
           this.coefficientTranslate = 25;
           this.countTechnologiesDisplayed = 4;
-        } else if(this.getCoefficientAdaptive === 4) {
+        } else if(this.getCoefficientAdaptive === 5) {
           this.coefficientTranslate = 33.5;
           this.countTechnologiesDisplayed = 3;
-        } else if(this.getCoefficientAdaptive === 3) {
+        } else if(this.getCoefficientAdaptive === 4 || this.getCoefficientAdaptive === 3) {
           this.coefficientTranslate = 50;
           this.countTechnologiesDisplayed = 2;
         } else if (this.getCoefficientAdaptive === 2 || this.getCoefficientAdaptive === 1) {
@@ -266,16 +266,13 @@
   }
 
   @media (min-width: 992px) and (max-width: 1279px) {
-
-  }
-
-  @media (min-width: 768px) and (max-width: 991px) {
     .technologies__item {
       min-width: 31.4%;
     }
   }
 
-  @media (min-width: 480px) and (max-width: 767px) {
+
+  @media (min-width: 480px) and (max-width: 991px) {
     .technologies__item {
       min-width: 48%;
     }
