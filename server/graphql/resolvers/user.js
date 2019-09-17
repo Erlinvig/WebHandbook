@@ -74,6 +74,28 @@ module.exports = {
       }
     }
   },
+  updateFirstName: async args => {
+    const $set = {
+      firstName: args.userInput.firstName
+    };
+
+    try {
+      return await User.findOneAndUpdate({token: args.userInput.token}, $set, {useFindAndModify: false});
+    } catch (e) {
+      throw e
+    }
+  },
+  updateSecondName: async args => {
+    const $set = {
+      secondName: args.userInput.secondName
+    };
+
+    try {
+      return await User.findOneAndUpdate({token: args.userInput.token}, $set, {useFindAndModify: false});
+    } catch (e) {
+      throw e
+    }
+  },
   removeUser: async args => {
     try {
       await User.deleteOne({_id: args.userInput._id});

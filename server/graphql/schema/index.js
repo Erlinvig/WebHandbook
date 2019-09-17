@@ -25,6 +25,8 @@ module.exports = buildSchema(`
     
     signin(userInput: UserInput): User
     signup(userInput: UserInput): User
+    updateFirstName(userInput: UserInput): User
+    updateSecondName(userInput: UserInput): User
     removeUser(userInput: UserInput): User
   }
   schema {
