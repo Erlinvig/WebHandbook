@@ -80,7 +80,8 @@ module.exports = {
     };
 
     try {
-      return await User.findOneAndUpdate({token: args.userInput.token}, $set, {useFindAndModify: false});
+      await User.findOneAndUpdate({token: args.userInput.token}, $set, {useFindAndModify: false});
+      return User.findOne({token: args.userInput.token});
     } catch (e) {
       throw e
     }
@@ -91,7 +92,8 @@ module.exports = {
     };
 
     try {
-      return await User.findOneAndUpdate({token: args.userInput.token}, $set, {useFindAndModify: false});
+      await User.findOneAndUpdate({token: args.userInput.token}, $set, {useFindAndModify: false});
+      return User.findOne({token: args.userInput.token});
     } catch (e) {
       throw e
     }

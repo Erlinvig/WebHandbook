@@ -12,7 +12,13 @@ export const mutations = {
   },
   clearCurrentUser(state) {
     state.user = null;
-  }
+  },
+  updateFirstName(state, payload) {
+    state.user.firstName = payload.firstName
+  },
+  updateSecondName(state, payload) {
+    state.user.secondName = payload.secondName
+  },
 };
 
 export const actions = {

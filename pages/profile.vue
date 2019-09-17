@@ -18,7 +18,11 @@
           )
         button.row__btn(
           @click="modifyFirstName"
-        ) Изменить
+        )
+          span(v-if="firstName.state === stateOption.default") Изменить
+          span(v-if="firstName.state === stateOption.modification") Сохранить
+          span.el-icon-loading(v-if="firstName.state === stateOption.loading")
+
       .profile-wrapper__row.row.mb1
         span.row__title Фамилия:
         span.row__field(
@@ -34,8 +38,10 @@
           )
         button.row__btn(
           @click="modifySecondName"
-        ) Изменить
-
+        )
+          span(v-if="secondName.state === stateOption.default") Изменить
+          span(v-if="secondName.state === stateOption.modification") Сохранить
+          span.el-icon-loading(v-if="secondName.state === stateOption.loading")
 </template>
 
 <script>
@@ -58,16 +64,41 @@
       }
     },
     methods: {
-      modifyFirstName() {
-        this.firstName.field = this.user.firstName;
-        this.firstName.state = this.stateOption.modification
+      async modifyFirstName() {
+        if (this.firstName.state === this.stateOption.default){
+          this.firstName.field = this.user.firstName;
+          this.firstName.state = this.stateOption.modification
+        }
+        else if (this.firstName.state === this.stateOption.modification) {
+          this.firstName.state = this.stateOption.loading;
+          await this.updateFirstName();
+          this.firstName.state = this.stateOption.default;
+        }
+      },
+      async updateFirstName() {
+        if (this.firstName.field) {
+          await this.$store.dispatch('user/updateFirstName', {firstName: this.firstName.field});
+        }
       },
       closeModifyFirstName() {
         this.firstName.state = this.stateOption.default
       },
-      modifySecondName() {
-        this.secondName.field = this.user.secondName;
-        this.secondName.state = this.stateOption.modification
+
+      async modifySecondName() {
+        if (this.secondName.state === this.stateOption.default){
+          this.secondName.field = this.user.secondName;
+          this.secondName.state = this.stateOption.modification
+        }
+        else if (this.secondName.state === this.stateOption.modification) {
+          this.secondName.state = this.stateOption.loading;
+          await this.updateSecondName();
+          this.secondName.state = this.stateOption.default;
+        }
+      },
+      async updateSecondName() {
+        if (this.secondName.field) {
+          await this.$store.dispatch('user/updateSecondName', {secondName: this.secondName.field});
+        }
       },
       closeModifySecondName() {
         this.secondName.state = this.stateOption.default
@@ -85,7 +116,7 @@
   .profile-wrapper {
     display: flex;
     flex-direction: column;
-    margin: 1em auto;
+    margin: 2em auto;
     padding: 0 1em;
     background-color: #fff;
     border-radius: .5em;
@@ -122,8 +153,8 @@
 
         input {
           width: 80%;
-          font-size: 18px;
-          padding: .5em;
+          font-size: 15px;
+          padding: .4em .6em;
           border: 1px solid gainsboro;
         }
         i {
