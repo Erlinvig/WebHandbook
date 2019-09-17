@@ -76,7 +76,7 @@
     .success-wrapper.auth-wrapper.mt2(v-if="authState === authOption.success")
       i.el-icon-circle-check.success-icon
       h1.title.mb1.mt1 Регистрация пройдена успешно
-      nuxt-link.profile(to="signin") Войти в личный кабинет
+      nuxt-link.profile(to="profile") Войти в личный кабинет
 </template>
 
 <script>
