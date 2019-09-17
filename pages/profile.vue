@@ -175,6 +175,9 @@
         padding: .5em 1em;
         border-radius: 1em;
         transition: .5s;
+        &:hover {
+          background-color: #dffffd;
+        }
       }
     }
   }
