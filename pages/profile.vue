@@ -33,7 +33,7 @@
         .row__modify(v-if="secondName.state === stateOption.modification || secondName.state === stateOption.loading")
           input(
             v-model="secondName.field"
-            placeholder="Новое имя"
+            placeholder="Новая фамилия"
           )
           i.el-icon-circle-close(
             @click="closeModifySecondName"
@@ -183,6 +183,12 @@
           this.password.error = result.error;
           this.password.success = result.success;
           this.password.state = this.stateOption.default;
+
+          if (this.password.success) {
+            this.password.old = '';
+            this.password.update = '';
+            this.password.repeat = '';
+          }
         }
       }
     },
@@ -330,6 +336,43 @@
         background-color: #dffffd;
       }
     }
+  }
 
+  @media (max-width: 991px) {
+    .profile-wrapper {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .profile-wrapper {
+      .row {
+        &__title { display: none; }
+        &__field { margin: 0; }
+        &__field, &__modify {
+          width: 55%;
+        }
+        button { width: 40%; }
+      }
+
+      .password {
+        margin: 0;
+        flex-direction: column;
+
+        input {
+          width: 100%;
+          margin: .5em 0;
+        }
+      }
+      .password-save {
+        margin-top: 1em;
+        button {
+          width: 100%;
+        }
+      }
+      .password-error, .password-success {
+        margin-bottom: .5em;
+      }
+    }
   }
 </style>
