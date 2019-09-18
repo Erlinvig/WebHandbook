@@ -41,7 +41,7 @@ module.exports = {
     if (user) {
       return user;
     } else {
-      throw new Error("Пользователь не найден")
+      throw new Error("Пользователь не найден!")
     }
   },
 
@@ -97,6 +97,34 @@ module.exports = {
     } catch (e) {
       throw e
     }
+  },
+  updatePassword: async args => {
+    const user = await User.findOne({token: args.userInput.token});
+    let result = null;
+
+    if (user) {
+      const isOldPasswordCorrect = bcrypt.compareSync(args.userInput.oldPassword, user.password);
+
+      if (isOldPasswordCorrect) {
+        const salt = bcrypt.genSaltSync(10);
+
+        const $set = {
+          password: bcrypt.hashSync(args.userInput.updatePassword, salt)
+        };
+
+        await User.findOneAndUpdate({token: args.userInput.token}, $set, {useFindAndModify: false});
+        result = User.findOne({token: args.userInput.token});
+      } else {
+        throw new Error("Текущий пароль указан не верно!")
+      }
+    }
+    try {
+      return result
+    }
+    catch (e) {
+      throw e
+    }
+
   },
   removeUser: async args => {
     try {

@@ -1,5 +1,5 @@
 import Cookie from "cookie";
-import queryUser from './queries/user'
+import queryUser from './querys/user'
 
 function getToken() {
   const cookieStr = process.browser
@@ -34,5 +34,23 @@ export const actions = {
     });
 
     commit('auth/updateSecondName', {secondName: result.data.updateSecondName.secondName}, { root: 'auth' });
+  },
+
+  async updatePassword({commit}, payload) {
+    const token = getToken();
+
+    const query = queryUser.updatePassword({token, ...payload});
+
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+
+    let successMessage = "Пароль успешно изменен";
+
+    if (result.data.updatePassword) {
+     return {success: successMessage, error: null}
+    } else {
+     return {success: false, error: result.errors[0].message};
+    }
   }
 };

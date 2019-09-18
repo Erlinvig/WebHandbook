@@ -1,4 +1,4 @@
-import queryContent from './queries/content'
+import queryContent from './querys/content'
 
 export const state = () => ({
   activeTechnologyID: null,

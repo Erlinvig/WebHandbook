@@ -5,6 +5,8 @@ module.exports = `
     secondName: String
     login: String
     password: String
+    oldPassword: String
+    updatePassword: String
     status: String
     token: String
   }

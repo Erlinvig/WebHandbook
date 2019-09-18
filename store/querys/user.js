@@ -18,5 +18,14 @@ module.exports = {
       }
     }
     `
-  }
+  },
+  updatePassword(payload) {
+    return `
+    mutation {
+      updatePassword(userInput: { token: "${payload.token}", oldPassword: "${payload.oldPassword}", updatePassword: "${payload.updatePassword}" }) {
+        _id
+      }
+    }
+    `
+  },
 };
