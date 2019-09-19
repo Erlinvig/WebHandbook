@@ -31,8 +31,9 @@
                 class="el-icon-delete"
                 @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить страницу?', actionOK: 'content/removePage', actionOKPayload: {_id: page._id}})"
                 )
-          .column__page-creator(@click="createPage({chapterID: chapter._id})")
-            button.btn Создать страницу
+          //.column__page-creator(@click="createPage({chapterID: chapter._id})")
+          .column__page-creator
+            nuxt-link.btn(to="/admin/PageCreator") Создать страницу
         .table__chapter-creator
           .creator(v-if="isCreateChapter")
             input.creator__field(placeholder="Название раздела" v-model="chapterTitle")

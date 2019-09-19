@@ -28,12 +28,16 @@ module.exports = {
     '@/theme/main.scss',
     '@/theme/adaptive.scss',
     'element-ui/lib/theme-chalk/index.css',
+    'quill/dist/quill.core.css',
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css'
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~plugins/main.js'
+    '~plugins/main.js',
+    { src: '~plugins/nuxt-quill-plugin.js', ssr: false }
   ],
   /*
   ** Nuxt.js dev-modules
