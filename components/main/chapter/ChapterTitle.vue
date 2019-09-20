@@ -10,22 +10,20 @@
 <script>
   export default {
     props: ['chapter'],
-    data() {
-      return {
-        isOpen: false
-      }
-    },
     methods: {
       openChapter() {
-        this.isOpen = !this.isOpen;
+        console.log(this.isOpen)
         this.isOpen
-          ? this.$store.dispatch('content/openChapter', {id: this.chapter._id})
-          : this.$store.dispatch('content/closeChapter', {id: this.chapter._id});
+          ? this.$store.dispatch('content/closeChapter', {id: this.chapter._id})
+          : this.$store.dispatch('content/openChapter', {id: this.chapter._id});
       }
     },
     computed: {
       rotateClass() {
         return this.isOpen ? 'rotateOpen' : 'rotateClose'
+      },
+      isOpen() {
+        return this.chapter.isOpen
       }
     }
   }
