@@ -58,10 +58,11 @@ module.exports = {
   createPage(payload) {
     return `
       mutation {
-        createPage(pageInput: {title: "${payload.title}", chapterID: "${payload.chapterID}" }) {
+        createPage(pageInput: {title: "${payload.title}", chapterID: "${payload.chapterID}", content: "${payload.content}" }) {
           _id
           chapterID
           technologyID
+          content
         }
       }
     `

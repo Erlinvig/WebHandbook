@@ -33,7 +33,7 @@
                 )
           //.column__page-creator(@click="createPage({chapterID: chapter._id})")
           .column__page-creator
-            nuxt-link.btn(to="/admin/PageCreator") Создать страницу
+            nuxt-link.btn(:to="`PageCreator/${chapter._id}`") Создать страницу
         .table__chapter-creator
           .creator(v-if="isCreateChapter")
             input.creator__field(placeholder="Название раздела" v-model="chapterTitle")
@@ -65,12 +65,15 @@
       }
     },
     methods: {
+      createPage(chapterID) {
+        this.$router.push(`PageCreator/${chapterID}`)
+      },
       openDialog(payload) {
         this.$store.dispatch('dialog/open', payload)
       },
-      createPage(payload) {
-        this.$store.dispatch('content/createPage', {chapterID: payload.chapterID, title: "Page"})
-      },
+      //createPage(payload) {
+      //  this.$store.dispatch('content/createPage', {chapterID: payload.chapterID, title: "Page"})
+      //},
       removePage(payload) {
         this.$store.dispatch('content/removePage', {_id: payload._id})
       },

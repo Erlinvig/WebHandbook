@@ -1,33 +1,41 @@
 <template lang="pug">
   .editor-wrapper
-    input.title.mb1(placeholder="Заголовок страницы")
+    input.title.mb1(
+      placeholder="Заголовок страницы"
+      v-model="title"
+      )
     client-only
       quill-editor(
         v-model="content"
-        :disabled='true'
+        :disabled='false'
         )
-    button(@click="showContent") Show
 </template>
 
 <script>
   export default {
     data() {
       return {
+        title: '',
         content: ''
       }
     },
-    methods: {
-      showContent() {
-        console.log(this.content)
+
+    watch: {
+      title: function (newValue) {
+        this.$store.dispatch('page/updateTitle', {title: newValue})
+      },
+      content: function (newValue) {
+        this.$store.dispatch('page/updateContent', {content: newValue})
       }
-    },
-    computed: {
-     getContent() {
-       return this.content;
-     }
     }
   }
 </script>
+
+<style>
+  .ql-editor {
+    min-height: 300px;
+  }
+</style>
 
 <style lang="scss" scoped>
   .editor-wrapper {

@@ -1,5 +1,5 @@
 import Cookie from "cookie";
-import queryUser from './querys/user'
+import queryUser from './query/user'
 
 function getToken() {
   const cookieStr = process.browser

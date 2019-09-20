@@ -3,5 +3,6 @@ module.exports = `
     _id: String
     title: String
     chapterID: String
+    content: String
   }
 `;
