@@ -1,8 +1,10 @@
 <template lang="pug">
   .creator-wrapper
-    text-editor.mb1
+    text-editor.mb1(:options="options")
     .actions
-      button() Режим просмотра
+      button(@click="changeState")
+        span(v-if="mode === modeOption.edit") Режим просмотра
+        span(v-if="mode === modeOption.watch") Режим редактирования
       button(@click="createPage") Создать
 </template>
 
@@ -14,7 +16,21 @@
     components: {
       TextEditor
     },
+    data() {
+      return {
+        mode: 'edit',
+        modeOption: {
+          watch: 'watch',
+          edit: 'edit'
+        }
+      }
+    },
     methods: {
+      changeState() {
+        this.mode === this.modeOption.watch
+          ? this.mode = this.modeOption.edit
+          : this.mode = this.modeOption.watch
+      },
       createPage() {
         let chapterID = this.$route.params.id;
         let pageData = {
@@ -24,6 +40,13 @@
         };
 
         this.$store.dispatch('content/createPage', pageData)
+      }
+    },
+    computed: {
+      options() {
+        return {
+          mode: this.mode
+        }
       }
     }
   }

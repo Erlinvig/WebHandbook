@@ -2,6 +2,14 @@ const Chapter = require('../../models/chapters');
 const Page = require('../../models/pages');
 
 module.exports = {
+  page: async args => {
+    try {
+      return await Page.findOne({_id: args._id})
+    }
+    catch (e) {
+      throw e
+    }
+  },
   createPage: async args => {
     const page = new Page({
       title: args.pageInput.title,

@@ -7,6 +7,7 @@ module.exports = buildSchema(`
   ${inputs}
   
   type RootQuery {
+      page(_id: ID): Page
       technologies(technologyInput: TechnologyInput): [Technology!]!
       users(userInput: UserInput): [User!]!
       getUserByToken(userInput: UserInput): User
