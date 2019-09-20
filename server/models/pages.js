@@ -9,7 +9,7 @@ const pageSchema = new Schema({
   },
   content: {
     type: String,
-    default: 'Content'
+    required: true
   },
   chapterID: {
     type: Schema.Types.ObjectId,

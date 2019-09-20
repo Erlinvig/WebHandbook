@@ -1,4 +1,4 @@
-import queryContent from './query/content'
+import queryContent from './queries/content'
 
 export const state = () => ({
   activeTechnologyID: null,
@@ -90,6 +90,14 @@ export const actions = {
       query: query
     });
     await dispatch('setTechnologyById', {id: state.activeTechnologyID})
+  },
+
+  async updatePage({commit, state, dispatch}, payload) {
+    const query = queryContent.updatePage(payload);
+
+    await this.$axios.$post('/graphql?', {
+      query: query
+    });
   },
 
   async removePage({commit, state, dispatch}, payload) {

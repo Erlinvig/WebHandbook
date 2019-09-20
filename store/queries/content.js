@@ -67,6 +67,17 @@ module.exports = {
       }
     `
   },
+  updatePage(payload) {
+    return `
+    mutation {
+      updatePage(pageInput: {_id: "${payload._id}", title: "${payload.title}", content: "${payload.content}"}) {
+        _id
+        title
+        content
+      }
+    }
+    `
+  },
   removePage(payload) {
     return `
       mutation {

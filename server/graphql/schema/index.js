@@ -22,6 +22,7 @@ module.exports = buildSchema(`
     removeChapter(chapterInput: ChapterInput): Chapter
     
     createPage(pageInput: PageInput): Page
+    updatePage(pageInput: PageInput): Page
     removePage(pageInput: PageInput): Page
     
     signin(userInput: UserInput): User

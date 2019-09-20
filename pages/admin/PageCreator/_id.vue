@@ -31,7 +31,7 @@
           ? this.mode = this.modeOption.edit
           : this.mode = this.modeOption.watch
       },
-      createPage() {
+      async createPage() {
         let chapterID = this.$route.params.id;
         let pageData = {
           chapterID,
@@ -39,12 +39,14 @@
           content: this.$store.getters['page/getContent']
         };
 
-        this.$store.dispatch('content/createPage', pageData)
+        await this.$store.dispatch('content/createPage', pageData)
       }
     },
     computed: {
       options() {
         return {
+          savedTitle: '',
+          savedContent: '',
           mode: this.mode
         }
       }

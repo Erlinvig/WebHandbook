@@ -1,3 +1,5 @@
+import queryPage from './queries/page'
+
 export const state = () => ({
   title: null,
   content: null
@@ -18,6 +20,15 @@ export const actions = {
   },
   updateContent({commit}, payload) {
     commit('updateContent', payload)
+  },
+  async getPageByID({}, payload) {
+    const query = queryPage.getPageByID(payload);
+
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+
+    return result.data.page
   }
 };
 

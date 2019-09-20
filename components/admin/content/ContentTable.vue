@@ -24,14 +24,13 @@
           .column__page(
             v-for="page in chapter.pages"
           )
-            span {{page.title}}
+            nuxt-link(:to="`PageEditor/${page._id}`") {{page.title}}
             .actions
               i(class="el-icon-edit")
               i(
                 class="el-icon-delete"
                 @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить страницу?', actionOK: 'content/removePage', actionOKPayload: {_id: page._id}})"
                 )
-          //.column__page-creator(@click="createPage({chapterID: chapter._id})")
           .column__page-creator
             nuxt-link.btn(:to="`PageCreator/${chapter._id}`") Создать страницу
         .table__chapter-creator

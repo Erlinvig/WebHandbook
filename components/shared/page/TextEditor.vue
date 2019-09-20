@@ -35,10 +35,14 @@
 <script>
   export default {
     props: ['options'],
+    mounted() {
+      this.title = this.options.savedTitle;
+      this.content = this.options.savedContent;
+    },
     data() {
       return {
-        title: '',
-        content: '',
+        title: null,
+        content: null,
         modeOption: {
           watch: 'watch',
           edit: 'edit'

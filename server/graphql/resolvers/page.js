@@ -13,6 +13,7 @@ module.exports = {
   createPage: async args => {
     const page = new Page({
       title: args.pageInput.title,
+      content: args.pageInput.content,
       chapterID: args.pageInput.chapterID,
       technologyID: null
     });
@@ -26,6 +27,18 @@ module.exports = {
       await chapter.save();
 
       return page;
+    } catch (e) {
+      throw e
+    }
+  },
+  updatePage: async args => {
+    const $set = {
+      title: args.pageInput.title,
+      content: args.pageInput.content
+    };
+
+    try {
+      return await Page.findOneAndUpdate({_id: args.pageInput._id}, $set, {useFindAndModify: false});
     } catch (e) {
       throw e
     }

@@ -1,4 +1,4 @@
-import queryAuth from './query/auth'
+import queryAuth from './queries/auth'
 import Cookie from 'cookie'
 import Cookies from 'js-cookie'
 
