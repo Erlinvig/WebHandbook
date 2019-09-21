@@ -6,7 +6,7 @@
       v-if="options.mode === modeOption.edit"
       )
     span.title--watch(
-      v-if="options.mode === modeOption.watch"
+      v-if="options.mode === modeOption.watch && !options.hideTitle"
     ) {{title}}
     client-only
       quill-editor(
@@ -19,7 +19,6 @@
           id="toolbar"
           slot="toolbar"
           v-show="options.mode === modeOption.edit"
-
           )
           select(class="ql-size")
             option(value="small")
@@ -94,6 +93,7 @@
         font-weight: 700;
         margin-bottom: 1rem;
         display: block;
+        text-align: center;
       }
       &--edit, &--watch {
         width: 100%;

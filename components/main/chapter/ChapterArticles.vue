@@ -5,7 +5,7 @@
         .angle-top-left
         .angle-top-right
       .row(v-for="(row, index) in getRows" :key="index")
-        nuxt-link.row__item(v-for="(item, index) in row" :key="index" to="/")
+        nuxt-link.row__item(v-for="(item, index) in row" :key="index" :to="`page/${item._id}`")
           span {{item.title}}
         .row__item.empty(v-if="row.length < countColumn")
       p.no-content(v-if="getRows.length === 0") Пусто

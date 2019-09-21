@@ -1,12 +1,86 @@
 <template lang="pug">
-  .container
-    p Page
+  .container(v-if="page")
+    .title.mt1.mb1
+      h1 {{title}}
+      button(@click="markViewed")
+        i.el-icon-circle-check
+        span Изучено
+    text-editor.mb1(:options="options")
 </template>
 
 <script>
+  import TextEditor from '~/components/shared/page/TextEditor'
 
+  export default {
+    async mounted() {
+      let pageID = this.$route.params.id;
+
+      this.page = await this.$store.dispatch('page/getPageByID', {_id: pageID});
+
+      console.log(this.page)
+    },
+    components: {
+      TextEditor
+    },
+    data() {
+      return {
+        page: null,
+        error: null,
+        mode: 'watch'
+      }
+    },
+    methods: {
+      markViewed() {
+
+      }
+    },
+    computed: {
+      options() {
+        return {
+          savedTitle: this.page.title,
+          savedContent: this.page.content,
+          mode: this.mode,
+          hideTitle: true
+        }
+      },
+      title() {
+        return this.$store.getters['page/getTitle'];
+      }
+    }
+  }
 </script>
 
-<style>
+<style lang="scss" scoped>
+  .title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
+    button {
+      cursor: pointer;
+      padding: 1em 3em;
+      border: 1px solid #bebebe;
+      border-radius: 5px;
+      transition: .5s;
+      margin-right: 1em;
+      min-width: 11em;
+
+      i {
+        margin-right: .5em;
+      }
+
+      i, span {
+        color: #797979;
+        font-size: 18px;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &:hover {
+        background-color: #e6f5e0;
+      }
+    }
+  }
 </style>

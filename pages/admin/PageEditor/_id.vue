@@ -8,7 +8,7 @@
       span {{success}}
     text-editor.mb1(:options="options")
     p {{savedTitle}}
-    .actions
+    .actions.mb1
       button(@click="changeState")
         span(v-if="mode === modeOption.edit") Режим просмотра
         span(v-if="mode === modeOption.watch") Режим редактирования
@@ -67,18 +67,18 @@
         const isFilled = pageData.title && pageData.content;
 
         if (!isFilled) {
-          this.error = 'Все поля должны быть заполены!';
-          this.success = null;
+         this.error = 'Все поля должны быть заполены!';
+         this.success = null;
         }
         else {
-          this.error = null;
-          if (this.stateUpdate === this.stateOption.default || this.stateUpdate === this.stateOption.success) {
-            this.stateUpdate = this.stateOption.loading;
-            await this.$store.dispatch('content/updatePage', pageData);
-            this.stateUpdate = this.stateOption.success;
-            this.error = null;
-            this.success = 'Страница успешно обновлена'
-          }
+         this.error = null;
+         if (this.stateUpdate === this.stateOption.default || this.stateUpdate === this.stateOption.success) {
+           this.stateUpdate = this.stateOption.loading;
+           await this.$store.dispatch('content/updatePage', pageData);
+           this.stateUpdate = this.stateOption.success;
+           this.error = null;
+           this.success = 'Страница успешно обновлена'
+         }
         }
       }
     },

@@ -4,7 +4,7 @@
       i.el-icon-warning-outline
       span {{error}}
     text-editor.mb1(:options="options")
-    .actions
+    .actions.mb1
       button(@click="changeState")
         span(v-if="mode === modeOption.edit") Режим просмотра
         span(v-if="mode === modeOption.watch") Режим редактирования
