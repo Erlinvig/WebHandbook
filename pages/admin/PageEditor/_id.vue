@@ -156,4 +156,17 @@
       }
     }
   }
+
+  @media (max-width: 479px) {
+    .actions {
+      flex-direction: column;
+
+      button {
+        &:first-child {
+          margin-right: 0;
+          margin-bottom: 1em;
+        }
+      }
+    }
+  }
 </style>
