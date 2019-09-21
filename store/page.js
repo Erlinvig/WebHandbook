@@ -1,4 +1,5 @@
 import queryPage from './queries/page'
+import CryptoJS from "crypto-js";
 
 export const state = () => ({
   title: null,
@@ -27,6 +28,9 @@ export const actions = {
     const result = await this.$axios.$post('/graphql?', {
       query: query
     });
+
+    let bytes  = CryptoJS.AES.decrypt(result.data.page.content, 'key');
+    result.data.page.content = bytes.toString(CryptoJS.enc.Utf8);
 
     return result.data.page
   }

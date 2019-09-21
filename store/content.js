@@ -1,4 +1,5 @@
 import queryContent from './queries/content'
+import CryptoJS from 'crypto-js'
 
 export const state = () => ({
   activeTechnologyID: null,
@@ -84,6 +85,7 @@ export const actions = {
   },
 
   async createPage({commit, state, dispatch}, payload) {
+    payload.content = CryptoJS.AES.encrypt(payload.content, 'key').toString();
     const query = queryContent.createPage(payload);
 
     const result = await this.$axios.$post('/graphql?', {
@@ -93,6 +95,7 @@ export const actions = {
   },
 
   async updatePage({commit, state, dispatch}, payload) {
+    payload.content = CryptoJS.AES.encrypt(payload.content, 'key').toString();
     const query = queryContent.updatePage(payload);
 
     await this.$axios.$post('/graphql?', {
