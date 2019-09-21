@@ -1,12 +1,20 @@
 <template lang="pug">
   .creator-wrapper(v-if="page")
+    .error.mb1(v-if="error")
+      i.el-icon-warning-outline
+      span {{error}}
+    .success.mb1(v-if="success")
+      i.el-icon-circle-check
+      span {{success}}
     text-editor.mb1(:options="options")
     p {{savedTitle}}
     .actions
       button(@click="changeState")
         span(v-if="mode === modeOption.edit") Режим просмотра
         span(v-if="mode === modeOption.watch") Режим редактирования
-      button(@click="updatePage") Обновить
+      button(@click="updatePage")
+        span(v-if="stateUpdate === stateOption.default || stateUpdate === stateOption.success") Обновить
+        span.el-icon-loading(v-if="stateUpdate === stateOption.loading")
 </template>
 
 <script>
@@ -24,6 +32,8 @@
     },
     data() {
       return {
+        error: null,
+        success: null,
         page: null,
         savedTitle: null,
         savedContent: null,
@@ -31,6 +41,12 @@
         modeOption: {
           watch: 'watch',
           edit: 'edit'
+        },
+        stateUpdate: 'default',
+        stateOption: {
+          default: 'default',
+          loading: 'loading',
+          success: 'success'
         }
       }
     },
@@ -48,7 +64,22 @@
           content: this.$store.getters['page/getContent']
         };
 
-        await this.$store.dispatch('content/updatePage', pageData)
+        const isFilled = pageData.title && pageData.content;
+
+        if (!isFilled) {
+          this.error = 'Все поля должны быть заполены!';
+          this.success = null;
+        }
+        else {
+          this.error = null;
+          if (this.stateUpdate === this.stateOption.default || this.stateUpdate === this.stateOption.success) {
+            this.stateUpdate = this.stateOption.loading;
+            await this.$store.dispatch('content/updatePage', pageData);
+            this.stateUpdate = this.stateOption.success;
+            this.error = null;
+            this.success = 'Страница успешно обновлена'
+          }
+        }
       }
     },
     computed: {
@@ -79,6 +110,7 @@
         border-radius: 5px;
         transition: .5s;
         margin-right: 1em;
+        min-width: 11em;
 
         &:last-child {
           margin-right: 0;
@@ -87,6 +119,40 @@
         &:hover {
           background-color: #deffdf;
         }
+      }
+    }
+
+    .error {
+      border: 1px solid #ff8675;
+      background-color: #ffe2d6;
+      padding: .5em;
+      display: flex;
+      align-items: center;
+
+      i {
+        font-size: 25px;
+        color: #7f0000;
+        margin-right: .5em;
+      }
+      span {
+        color: #7f0000;
+      }
+    }
+
+    .success {
+      border: 1px solid #a7ffab;
+      background-color: #deffdf;
+      padding: .5em;
+      display: flex;
+      align-items: center;
+
+      i {
+        font-size: 25px;
+        color: #009200;
+        margin-right: .5em;
+      }
+      span {
+        color: #009200;
       }
     }
   }

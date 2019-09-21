@@ -12,7 +12,6 @@
     props: ['chapter'],
     methods: {
       openChapter() {
-        console.log(this.isOpen)
         this.isOpen
           ? this.$store.dispatch('content/closeChapter', {id: this.chapter._id})
           : this.$store.dispatch('content/openChapter', {id: this.chapter._id});

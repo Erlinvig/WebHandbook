@@ -1,11 +1,16 @@
 <template lang="pug">
   .creator-wrapper
+    .error.mb1(v-if="error")
+      i.el-icon-warning-outline
+      span {{error}}
     text-editor.mb1(:options="options")
     .actions
       button(@click="changeState")
         span(v-if="mode === modeOption.edit") Режим просмотра
         span(v-if="mode === modeOption.watch") Режим редактирования
-      button(@click="createPage") Создать
+      button(@click="createPage")
+        span(v-if="stateSave === stateOption.default") Создать
+        span.el-icon-loading(v-if="stateSave === stateOption.loading")
 </template>
 
 <script>
@@ -18,10 +23,17 @@
     },
     data() {
       return {
+        error: null,
         mode: 'edit',
         modeOption: {
           watch: 'watch',
           edit: 'edit'
+        },
+        stateSave: 'default',
+        stateOption: {
+          default: 'default',
+          loading: 'loading',
+          success: 'success'
         }
       }
     },
@@ -39,7 +51,20 @@
           content: this.$store.getters['page/getContent']
         };
 
-        await this.$store.dispatch('content/createPage', pageData)
+        const isFilled = pageData.title && pageData.content;
+
+        if (!isFilled) {
+          this.error = 'Все поля должны быть заполены!';
+        }
+
+        else {
+          this.error = null;
+          if (this.stateSave === this.stateOption.default) {
+            this.stateSave = this.stateOption.loading;
+            await this.$store.dispatch('content/createPage', pageData);
+            this.$router.push('/admin/content')
+          }
+        }
       }
     },
     computed: {
@@ -78,6 +103,22 @@
         &:hover {
           background-color: #deffdf;
         }
+      }
+    }
+    .error {
+      border: 1px solid #ff8675;
+      background-color: #ffe2d6;
+      padding: .5em;
+      display: flex;
+      align-items: center;
+
+      i {
+        font-size: 25px;
+        color: #7f0000;
+        margin-right: .5em;
+      }
+      span {
+        color: #7f0000;
       }
     }
   }
