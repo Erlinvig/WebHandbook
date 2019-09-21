@@ -66,6 +66,10 @@
 </script>
 
 <style lang="scss">
+  .quill-editor {
+    background-color: #fff;
+    border-radius: .5em;
+  }
   .ql-editor {
     min-height: 300px;
   }
@@ -84,16 +88,19 @@
     .title {
       &--edit {
         border: 1px solid #cecece;
-        background-color: transparent;
+        background-color: #fff;
         font-size: 16px;
         padding: .5em;
       }
       &--watch {
+        background-color: #fff;
+        padding: .5em;
+        border-radius: .5rem;
+        border: 1px solid #bebebe;
         font-size: 30px;
         font-weight: 700;
         margin-bottom: 1rem;
         display: block;
-        text-align: center;
       }
       &--edit, &--watch {
         width: 100%;

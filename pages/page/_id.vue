@@ -16,8 +16,6 @@
       let pageID = this.$route.params.id;
 
       this.page = await this.$store.dispatch('page/getPageByID', {_id: pageID});
-
-      console.log(this.page)
     },
     components: {
       TextEditor
@@ -52,6 +50,10 @@
 
 <style lang="scss" scoped>
   .title {
+    background-color: #fff;
+    padding: 1em;
+    border-radius: .5em;
+    border: 1px solid #bebebe;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -79,7 +81,18 @@
       }
 
       &:hover {
-        background-color: #e6f5e0;
+        background-color: #efefef;
+      }
+    }
+  }
+
+  @media (max-width: 479px) {
+    .title {
+      flex-direction: column;
+
+      h1 {
+        margin-right: 0;
+        margin-bottom: .5em;
       }
     }
   }

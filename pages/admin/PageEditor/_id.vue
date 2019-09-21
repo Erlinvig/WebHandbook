@@ -102,6 +102,10 @@
     .actions {
       display: flex;
       justify-content: flex-end;
+      background-color: #fff;
+      padding: 1em;
+      border-radius: .5em;
+      border: 1px solid #bebebe;
 
       button {
         cursor: pointer;
