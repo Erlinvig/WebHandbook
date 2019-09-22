@@ -122,8 +122,18 @@
 
     }
   }
+
+  .ql-container {
+    overflow: auto;
+    height: 65vh;
+  }
+
   .editorWatch {
     border-top: 1px solid #cecece;
+    .ql-container {
+      overflow: auto;
+      height: 100%;
+    }
   }
 </style>
 
