@@ -50,9 +50,15 @@
           button.ql-indent(value="+1")
           select(class="ql-color")
           select(class="ql-background")
+
 </template>
 
 <script>
+  import hljs from 'highlight.js';
+  hljs.configure({
+    languages: ['javascript', 'ruby', 'python', "html", "css"]
+  });
+
   export default {
     props: ['options'],
     mounted() {
@@ -62,7 +68,7 @@
     data() {
       return {
         title: null,
-        content: null,
+        content: '',
         modeOption: {
           watch: 'watch',
           edit: 'edit'
@@ -70,14 +76,18 @@
         editorOption: {
           modules: {
             toolbar: '#toolbar',
-            //syntax: {
-            //  highlight: text => hljs.highlightAuto(text).value
-            //}
+            syntax: {
+             highlight: text => hljs.highlightAuto(text).value
+            }
           }
         }
       }
     },
-
+    computed: {
+      contentCode() {
+        return hljs.highlightAuto(this.content).value
+      }
+    },
     watch: {
       title: function (newValue) {
         this.$store.dispatch('page/updateTitle', {title: newValue})

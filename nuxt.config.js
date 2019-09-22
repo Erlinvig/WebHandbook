@@ -24,6 +24,7 @@ module.exports = {
   */
   css: [
     'normalize.css/normalize.css',
+    '@theme/atom-one-dark.css',
     '@/theme/reset.css',
     '@/theme/main.scss',
     '@/theme/adaptive.scss',
