@@ -25,10 +25,31 @@
             option(selected)
             option(value="large")
             option(value="huge")
+          select(class="ql-header")
+            option(value='1')
+            option(value='2')
+            option(value='3')
+            option(value='4')
+            option(value='5')
+            option(value='6')
+            option(selected='selected')
+          select(class="ql-align")
+          select.ql-font
+            option(selected='selected')
+            option(value='serif')
+            option(value='monospace')
           button.ql-bold
           button.ql-italic
+          button.ql-code-block
+          button.ql-blockquote
+          button.ql-list(value="ordered")
+          button.ql-list(value="bullet")
           button.ql-script(value="super")
           button.ql-script(value="sub")
+          button.ql-indent(value="-1")
+          button.ql-indent(value="+1")
+          select(class="ql-color")
+          select(class="ql-background")
 </template>
 
 <script>
@@ -48,7 +69,10 @@
         },
         editorOption: {
           modules: {
-            toolbar: '#toolbar'
+            toolbar: '#toolbar',
+            //syntax: {
+            //  highlight: text => hljs.highlightAuto(text).value
+            //}
           }
         }
       }
@@ -66,6 +90,16 @@
 </script>
 
 <style lang="scss">
+  .ql-editor {
+    font-size: 16px;
+
+    h1, h2, h3 {
+      margin-bottom: .5rem;
+    }
+    h4, h5, h6 {
+      margin-bottom: .3rem;
+    }
+  }
   .quill-editor {
     background-color: #fff;
     border-radius: .5em;
