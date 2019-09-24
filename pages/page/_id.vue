@@ -2,7 +2,7 @@
   .container(v-if="page")
     .title.mt1.mb1
       h1 {{title}}
-      button(@click="markViewed")
+      button(@click="markPage" :class="{'marked': isMarked}")
         i.el-icon-circle-check
         span Изучено
     text-editor.mb1(:options="options")
@@ -16,21 +16,33 @@
       let pageID = this.$route.params.id;
 
       this.page = await this.$store.dispatch('page/getPageByID', {_id: pageID});
+
+      const user = this.$store.getters['auth/currentUser'];
+      if (user) {
+        const searchPage = user.pages.find(page => page._id === pageID);
+        searchPage
+          ? this.isMarked = true
+          : this.isMarked = false
+      }
     },
     components: {
       TextEditor
     },
     data() {
       return {
+        isMarked: false,
         page: null,
         error: null,
         mode: 'watch'
       }
     },
     methods: {
-      markViewed() {
-
-      }
+      async markPage() {
+        this.isMarked
+          ? await this.$store.dispatch('user/unmarkPage', {pageID: this.page._id})
+          : await this.$store.dispatch('user/markPage', {pageID: this.page._id});
+        this.isMarked = !this.isMarked;
+      },
     },
     computed: {
       options() {
@@ -82,6 +94,17 @@
 
       &:hover {
         background-color: #efefef;
+      }
+    }
+    .marked {
+      background: #cbf1cb;
+      border: 1px solid #90c999;
+      span, i {
+        color: darkgreen;
+      }
+
+      &:hover {
+        background-color: #e4ffe5;
       }
     }
   }

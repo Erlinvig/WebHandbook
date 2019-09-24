@@ -1,4 +1,4 @@
-import queryContent from './queries/content'
+import queryContent from './queryList/content'
 import CryptoJS from 'crypto-js'
 
 export const state = () => ({

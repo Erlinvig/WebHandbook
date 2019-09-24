@@ -1,5 +1,5 @@
 import Cookie from "cookie";
-import queryUser from './queries/user'
+import queryUser from './queryList/user'
 
 function getToken() {
   const cookieStr = process.browser
@@ -52,5 +52,29 @@ export const actions = {
     } else {
      return {success: false, error: result.errors[0].message};
     }
+  },
+
+  async markPage({commit}, payload) {
+    const token = getToken();
+
+    const query = queryUser.markPage({token, ...payload});
+
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+
+    commit('auth/updateCurrentPages', {pages: result.data.markPage.pages}, { root: 'auth' })
+  },
+
+  async unmarkPage({commit}, payload) {
+    const token = getToken();
+
+    const query = queryUser.unmarkPage({token, ...payload});
+
+    const result = await this.$axios.$post('/graphql?', {
+      query: query
+    });
+
+    commit('auth/updateCurrentPages', {pages: result.data.unmarkPage.pages}, { root: 'auth' })
   }
 };

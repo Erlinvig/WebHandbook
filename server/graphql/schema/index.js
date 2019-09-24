@@ -31,6 +31,8 @@ module.exports = buildSchema(`
     updateSecondName(userInput: UserInput): User
     updatePassword(userInput: UserInput): User
     removeUser(userInput: UserInput): User
+    markPage(userInput: UserInput, pageInput: PageInput): User
+    unmarkPage(userInput: UserInput, pageInput: PageInput): User
   }
   schema {
       query: RootQuery

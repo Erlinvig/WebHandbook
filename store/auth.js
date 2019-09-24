@@ -1,4 +1,4 @@
-import queryAuth from './queries/auth'
+import queryAuth from './queryList/auth'
 import Cookie from 'cookie'
 import Cookies from 'js-cookie'
 
@@ -18,6 +18,9 @@ export const mutations = {
   },
   updateSecondName(state, payload) {
     state.user.secondName = payload.secondName
+  },
+  updateCurrentPages(state, payload) {
+    state.user.pages = payload.pages
   },
 };
 

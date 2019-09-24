@@ -31,11 +31,7 @@ const userSchema = new Schema({
   pages: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Page',
-      state: {
-        type: String,
-        default: 'None'
-      }
+      ref: 'Page'
     }
   ]
 });

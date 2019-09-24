@@ -124,7 +124,6 @@ module.exports = {
     catch (e) {
       throw e
     }
-
   },
   removeUser: async args => {
     try {
@@ -132,5 +131,17 @@ module.exports = {
     } catch (e) {
       throw e
     }
+  },
+  markPage: async args => {
+    const user = await User.findOne({token: args.userInput.token});
+    user.pages.push(args.pageInput._id);
+    user.save();
+    return await user;
+  },
+  unmarkPage: async args => {
+    const user = await User.findOne({token: args.userInput.token});
+    user.pages = user.pages.filter(pageID => pageID.toString() !== args.pageInput._id.toString());
+    user.save();
+    return await user;
   }
 };

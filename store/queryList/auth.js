@@ -21,6 +21,9 @@ module.exports = {
         secondName
         login
         status
+        pages {
+          _id
+        }
       }
     }`
   },

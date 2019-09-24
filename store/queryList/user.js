@@ -28,4 +28,28 @@ module.exports = {
     }
     `
   },
+  markPage(payload) {
+    return `
+    mutation {
+      markPage(userInput: {token: "${payload.token}"}, pageInput: {_id: "${payload.pageID}"}) {
+        _id
+        pages {
+          _id
+        }
+      }
+    }
+    `
+  },
+  unmarkPage(payload) {
+    return `
+    mutation {
+      unmarkPage(userInput: {token: "${payload.token}"}, pageInput: {_id: "${payload.pageID}"}) {
+        _id
+        pages {
+          _id
+        }
+      }
+    }
+    `
+  }
 };
