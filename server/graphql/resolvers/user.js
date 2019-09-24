@@ -36,7 +36,8 @@ module.exports = {
   },
 
   getUserByToken: async args => {
-    const user = await User.findOne({token: args.userInput.token});
+    const user = await User.findOne({token: args.userInput.token})
+      .populate('pages');
 
     if (user) {
       return user;
@@ -135,13 +136,13 @@ module.exports = {
   markPage: async args => {
     const user = await User.findOne({token: args.userInput.token});
     user.pages.push(args.pageInput._id);
-    user.save();
-    return await user;
+    await user.save();
+    return user;
   },
   unmarkPage: async args => {
     const user = await User.findOne({token: args.userInput.token});
     user.pages = user.pages.filter(pageID => pageID.toString() !== args.pageInput._id.toString());
-    user.save();
-    return await user;
+    await user.save();
+    return user;
   }
 };

@@ -63,7 +63,13 @@ export const actions = {
       query: query
     });
 
-    commit('auth/updateCurrentPages', {pages: result.data.markPage.pages}, { root: 'auth' })
+    const query_pages = queryUser.getUserPages({token});
+
+    const result_pages = await this.$axios.$post('/graphql?', {
+      query: query_pages
+    });
+
+    commit('auth/updateCurrentPages', {pages: result_pages}, { root: 'auth' })
   },
 
   async unmarkPage({commit}, payload) {
@@ -75,6 +81,12 @@ export const actions = {
       query: query
     });
 
-    commit('auth/updateCurrentPages', {pages: result.data.unmarkPage.pages}, { root: 'auth' })
+    const query_pages = queryUser.getUserPages({token});
+
+    const result_pages = await this.$axios.$post('/graphql?', {
+      query: query_pages
+    });
+
+   commit('auth/updateCurrentPages', {pages: result_pages.data.getUserByToken.pages}, { root: 'auth' })
   }
 };

@@ -23,6 +23,7 @@ module.exports = {
         status
         pages {
           _id
+          title
         }
       }
     }`

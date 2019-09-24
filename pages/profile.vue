@@ -62,6 +62,17 @@
           button.password-save__btn
             span(v-if="password.state === stateOption.default") Сохранить
             span.el-icon-loading(v-if="password.state === stateOption.loading")
+      .profile-wrapper__subtitle
+        span Изученные статьи
+      .pages.mb2
+        .pages__none.mt2(v-if="user.pages.length === 0")
+          span Нет изученных статей
+        .pages__item(
+          v-for="page in user.pages"
+          :key="page._id"
+          )
+          nuxt-link.pages__item__link(:to="`page/${page._id}`") {{page.title}}
+          i.el-icon-error(@click="unmarkPage({id: page._id})")
 </template>
 
 <script>
@@ -97,24 +108,21 @@
     validations: {
       password: {
         old: {
-
-            required
-
+          required
         },
         update: {
-
-            required,
-            minLength: minLength(6)
-
+          required,
+          minLength: minLength(6)
         },
         repeat: {
-
-            sameAsPassword: sameAs('update')
-
+          sameAsPassword: sameAs('update')
         }
       }
     },
     methods: {
+      unmarkPage(payload) {
+        this.$store.dispatch('user/unmarkPage', {pageID: payload.id})
+      },
       async modifyFirstName() {
         if (this.firstName.state === this.stateOption.default){
           this.firstName.field = this.user.firstName;
@@ -337,6 +345,41 @@
       }
     }
   }
+
+  .pages {
+    display: flex;
+    flex-direction: column;
+
+    &__none {
+      display: flex;
+      justify-content: center;
+    }
+
+    &__item {
+      padding: .65em 1.5em;
+      border-bottom: 1px solid #dbdbdb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &__link {
+        max-width: 80%;
+      }
+
+      .el-icon-error {
+        cursor: pointer;
+        font-size: 20px;
+        color: #9c0000;
+        transition: .5s;
+
+        &:hover {
+          color: red;
+        }
+      }
+    }
+  }
+
+
 
   @media (max-width: 991px) {
     .profile-wrapper {

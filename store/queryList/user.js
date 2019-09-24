@@ -33,9 +33,6 @@ module.exports = {
     mutation {
       markPage(userInput: {token: "${payload.token}"}, pageInput: {_id: "${payload.pageID}"}) {
         _id
-        pages {
-          _id
-        }
       }
     }
     `
@@ -45,8 +42,17 @@ module.exports = {
     mutation {
       unmarkPage(userInput: {token: "${payload.token}"}, pageInput: {_id: "${payload.pageID}"}) {
         _id
+      }
+    }
+    `
+  },
+  getUserPages(payload) {
+    return `
+    query {
+      getUserByToken(userInput: {token: "${payload.token}"}) {
         pages {
           _id
+          title
         }
       }
     }
