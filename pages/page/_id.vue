@@ -3,8 +3,9 @@
     .title.mt1.mb1
       h1 {{title}}
       button(@click="markPage" :class="{'marked': isMarked}")
-        i.el-icon-circle-check
-        span Изучено
+        span.el-icon-loading(v-if="isMarkState === stateOption.loading")
+        i.el-icon-circle-check(v-if="isMarkState === stateOption.default")
+        span(v-if="isMarkState === stateOption.default") Изучено
     text-editor.mb1(:options="options")
 </template>
 
@@ -30,6 +31,11 @@
     },
     data() {
       return {
+        stateOption: {
+          default: 'default',
+          loading: 'loading'
+        },
+        isMarkState: 'default',
         isMarked: false,
         page: null,
         error: null,
@@ -38,10 +44,12 @@
     },
     methods: {
       async markPage() {
+        this.isMarkState = this.stateOption.loading;
         this.isMarked
           ? await this.$store.dispatch('user/unmarkPage', {pageID: this.page._id})
           : await this.$store.dispatch('user/markPage', {pageID: this.page._id});
         this.isMarked = !this.isMarked;
+        this.isMarkState = this.stateOption.default;
       },
     },
     computed: {
@@ -77,7 +85,7 @@
       border-radius: 5px;
       transition: .5s;
       margin-right: 1em;
-      min-width: 11em;
+      min-width: 13em;
 
       i {
         margin-right: .5em;
@@ -93,7 +101,10 @@
       }
 
       &:hover {
-        background-color: #efefef;
+        border: 1px solid #797979;
+        span, i {
+          color: #606c5e;
+        }
       }
     }
     .marked {
@@ -104,7 +115,10 @@
       }
 
       &:hover {
-        background-color: #e4ffe5;
+        border: 1px solid #001d00;
+        span, i {
+          color: #001d00;
+        }
       }
     }
   }
