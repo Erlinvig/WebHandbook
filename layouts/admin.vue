@@ -15,7 +15,7 @@
   export default {
     middleware: [
       'autoSignin',
-      'access'
+      'adminAccess'
     ],
     components: {
       navigation,
