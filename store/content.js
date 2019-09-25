@@ -14,8 +14,27 @@ export const mutations = {
   setCurrentTechnology(state, payload) {
     payload.technology.chapters.forEach((chapter) => {
       chapter.isOpen = false;
+
+      chapter.pages.forEach(page => {
+        page.isMarked = false;
+      });
     });
+
     state.currentTechnology = payload.technology;
+  },
+  markPages(state) {
+    const userPages = this.getters['auth/currentUser'].pages;
+
+    let checkInUserPages = function(id) {
+     let search = userPages.find(item => item._id === id);
+     return !!search;
+    };
+
+    state.currentTechnology.chapters.forEach((chapter) => {
+     chapter.pages.forEach(page => {
+       page.isMarked = checkInUserPages(page._id);
+     });
+    });
   },
   setTechnologyList(state, payload) {
     state.technologyList = payload.technologyList
@@ -49,12 +68,13 @@ export const actions = {
     //return result.data.technologies
   },
 
-  async setTechnologyById({commit}, payload) {
+  async setTechnologyById({commit, dispatch}, payload) {
     const query = queryContent.getTechnologyById(payload);
     const result = await this.$axios.$post('/graphql?', {
       query: query
     });
     commit('setCurrentTechnology', {technology: result.data.technologies[0]});
+    await commit('markPages');
   },
 
   async createTechnology({commit, dispatch}, payload) {
@@ -109,6 +129,10 @@ export const actions = {
       query: query
     });
     await dispatch('setTechnologyById', {id: state.activeTechnologyID})
+  },
+
+  markPages({commit}) {
+    commit('markPages')
   },
 
   async createChapter({commit, state, dispatch}, payload) {

@@ -25,6 +25,7 @@ export default {
       this.technologyID = this.$route.query.technologyID
     }
     await this.$store.dispatch('content/setTechnologyById', {id: this.technologyID});
+    await this.$store.dispatch('content/markPages');
   },
   data() {
     return {

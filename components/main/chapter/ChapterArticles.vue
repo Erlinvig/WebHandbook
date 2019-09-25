@@ -5,7 +5,12 @@
         .angle-top-left
         .angle-top-right
       .row(v-for="(row, index) in getRows" :key="index")
-        nuxt-link.row__item(v-for="(item, index) in row" :key="index" :to="`page/${item._id}`")
+        nuxt-link.row__item(
+          v-for="(item, index) in row" 
+          :key="index" 
+          :to="`page/${item._id}`"
+          :class="{'row__item--marked': item.isMarked}"
+          )
           span {{item.title}}
         .row__item.empty(v-if="row.length < countColumn")
       p.no-content(v-if="getRows.length === 0") Пусто
@@ -16,10 +21,7 @@
 
 <script>
   export default {
-    props: {chapter: Object},
-    mounted() {
-      this.pages = this.chapter.pages;
-    },
+    props: ['chapter'],
     data() {
       return {
         height: 0,
@@ -27,7 +29,6 @@
         tweenedScale: 0,
         show: false,
         countColumn: null,
-        pages: []
       }
     },
     methods: {
@@ -42,6 +43,9 @@
       }
     },
     computed: {
+      pages() {
+        return this.chapter.pages;
+      },
       getCoefficientAdaptive() {
         return this.$store.getters['adaptive/getCoefficientAdaptive'];
       },
@@ -159,9 +163,12 @@
         span {
           font-size: 16px;
         }
-
         &:hover {
           box-shadow: 0 0 8px rgba(0,0,0,0.45);
+        }
+
+        &--marked {
+          background: #deffdc;
         }
       }
       .empty {

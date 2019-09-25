@@ -69,7 +69,7 @@ export const actions = {
       query: query_pages
     });
 
-    commit('auth/updateCurrentPages', {pages: result_pages}, { root: 'auth' })
+    commit('auth/updateCurrentPages', {pages: result_pages.data.getUserByToken.pages}, { root: 'auth' });
   },
 
   async unmarkPage({commit}, payload) {
