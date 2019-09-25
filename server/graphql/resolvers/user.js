@@ -12,16 +12,8 @@ module.exports = {
       const isPasswordCorrect = bcrypt.compareSync(args.userInput.password, candidate.password);
 
       if (isPasswordCorrect) {
-        const token = jwt.sign({
-          login: candidate.login,
-          userId: candidate._id
-        }, 'Token');
-
-        candidate.token = token;
-        candidate.save();
-
         return {
-          token,
+          token: candidate.token,
           _id: candidate._id,
           login: candidate.login,
           firstName: candidate.firstName,
