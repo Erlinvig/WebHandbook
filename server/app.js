@@ -16,7 +16,7 @@ mongoose.connect(keys.MONGO_URI, {useNewUrlParser: true})
 app.use('/graphql', graphqlHttp({
   schema: schema,
   rootValue: resolver,
-  graphiql: true
+  graphiql: keys.GRAPHQL_UI
 }));
 
 app.use(bodyParser.urlencoded({extended: true}));
