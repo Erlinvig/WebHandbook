@@ -14,6 +14,7 @@ export default {
     TechnologyContent
   },
   async mounted() {
+    this.$store.dispatch('content/clearCurrentTechnology');
     await this.$store.dispatch('content/getTechnologies');
     this.technologies = await this.$store.getters['content/getTechnologyList'];
     if (!this.$route.query.technologyID) {

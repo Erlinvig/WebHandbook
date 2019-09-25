@@ -22,6 +22,9 @@ export const mutations = {
 
     state.currentTechnology = payload.technology;
   },
+  clearCurrentTechnology(state) {
+    state.currentTechnology = null
+  },
   markPages(state) {
     const userPages = this.getters['auth/currentUser'].pages;
 
@@ -102,6 +105,10 @@ export const actions = {
       query: query
     });
     await dispatch('getTechnologies');
+  },
+
+  clearCurrentTechnology({commit}) {
+    commit('clearCurrentTechnology')
   },
 
   async createPage({commit, state, dispatch}, payload) {
