@@ -16,7 +16,6 @@
           .column__title
             span {{chapter.title}}
             .actions
-              i(class="el-icon-edit")
               i(
                 class="el-icon-delete"
                 @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить раздел?', actionOK: 'content/removeChapter', actionOKPayload: {_id: chapter._id}})"
@@ -26,7 +25,6 @@
           )
             nuxt-link(:to="`PageEditor/${page._id}`") {{page.title}}
             .actions
-              i(class="el-icon-edit")
               i(
                 class="el-icon-delete"
                 @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить страницу?', actionOK: 'content/removePage', actionOKPayload: {_id: page._id}})"
@@ -34,10 +32,16 @@
           .column__page-creator
             nuxt-link.btn(:to="`PageCreator/${chapter._id}`") Создать страницу
         .table__chapter-creator
-          .creator(v-if="isCreateChapter")
+          .creator(v-if="isCreateChapter === stateOption.modification")
+            .creator__enter.el-icon-circle-close(@click="closeCreateChapter")
             input.creator__field(placeholder="Название раздела" v-model="chapterTitle")
             .creator__enter.el-icon-circle-check(@click="createChapter({technologyID: getCurrentTechnology._id, title: chapterTitle})")
-          button.btn(@click="isCreateChapter = true" v-if="!isCreateChapter") Создать раздел
+          .creator
+            .el-icon-loading(v-if="isCreateChapter === stateOption.loading")
+          button.btn(
+            @click="isCreateChapter = stateOption.modification"
+            v-if="isCreateChapter === stateOption.default"
+            ) Создать раздел
     .table__navigation
       .box
         i(
@@ -54,8 +58,14 @@
     },
     data() {
       return {
+        chapterTitleState: 'default',
+        stateOption: {
+          default: 'default',
+          modification: 'modification',
+          loading: 'loading',
+        },
         chapterTitle: '',
-        isCreateChapter: false,
+        isCreateChapter: 'default',
         technology: null,
         countChaptersDisplayed: 0,
         coefficientTranslate: 0,
@@ -70,16 +80,17 @@
       openDialog(payload) {
         this.$store.dispatch('dialog/open', payload)
       },
-      //createPage(payload) {
-      //  this.$store.dispatch('content/createPage', {chapterID: payload.chapterID, title: "Page"})
-      //},
       removePage(payload) {
         this.$store.dispatch('content/removePage', {_id: payload._id})
       },
+      closeCreateChapter() {
+        this.isCreateChapter = this.stateOption.default;
+      },
       async createChapter(payload) {
         if (payload.title) {
+          this.isCreateChapter = this.stateOption.loading;
           await this.$store.dispatch('content/createChapter', {technologyID: payload.technologyID, title: payload.title});
-          this.isCreateChapter = false;
+          this.isCreateChapter = this.stateOption.default;
         }
       },
       removeChapter(payload) {
@@ -260,7 +271,17 @@
             border-bottom: 2px solid blue;
           }
         }
-        &__enter {
+        .el-icon-circle-close {
+          transition: .35s;
+          cursor: pointer;
+          margin-right: .5em;
+          font-size: 28px;
+          color: #ca0900;
+          &:hover {
+            color: #f40100;
+          }
+        }
+        .el-icon-circle-check {
           transition: .35s;
           cursor: pointer;
           margin-left: .5em;
@@ -271,6 +292,7 @@
           }
         }
       }
+
     }
   }
 
