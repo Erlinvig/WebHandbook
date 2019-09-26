@@ -46,7 +46,7 @@
           .table__chapter-creator
             .creator(v-if="isCreateChapter === stateOption.modification")
               .creator__enter.el-icon-circle-close(@click="closeCreateChapter")
-              input.creator__field(placeholder="Название раздела" v-model="chapterTitle")
+              input.creator__field(placeholder="Название" v-model="chapterTitle")
               .creator__enter.el-icon-circle-check(@click="createChapter({technologyID: getCurrentTechnology._id, title: chapterTitle})")
             .creator
               .el-icon-loading(v-if="isCreateChapter === stateOption.loading")
@@ -373,6 +373,11 @@
       }
       .table__content .column__page, .column__title {
         margin: 0;
+      }
+      &__content {
+        .creator__field {
+          width: 50%;
+        }
       }
     }
   }

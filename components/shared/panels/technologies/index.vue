@@ -287,19 +287,41 @@
 
 
   @media (min-width: 480px) and (max-width: 991px) {
+    .technologies {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
     .technologies__item {
       min-width: 48%;
     }
   }
 
   @media (min-width: 320px) and (max-width: 479px) {
+    .technologies {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
     .technologies__item {
       min-width: 90%;
       margin: 0 5%;
+      span, i {
+        font-size: 17px;
+        padding: 3px 0;
+      }
+      .creator__filling {
+        input, i {
+          font-size: 16px;
+          margin: 0;
+        }
+      }
     }
   }
 
   @media (max-width: 319px) {
+    .technologies {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
     .technologies__item {
       min-width: 90%;
       margin: 0 5%;
