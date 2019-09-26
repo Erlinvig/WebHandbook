@@ -10,7 +10,7 @@
           )
           i.el-icon-document.admin-menu__link__icon
           span.admin-menu__link__name Контент
-      li
+      li(v-if="false")
         nuxt-link.admin-menu__link(
           to="/admin/users"
           :class="{'admin-menu__link--active': isRouteActive('admin-users')}"

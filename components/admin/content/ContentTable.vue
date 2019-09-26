@@ -1,54 +1,66 @@
 <template lang="pug">
-  .table(v-if="getCurrentTechnology")
-    .table__navigation
-      .box
+  .wrapper
+    .navigation.mb1
+      .navigation__previos(@click="previous")
         i(
-          @click="previous"
           class="el-icon-arrow-left"
           :class="{'active': !isStart}"
-          )
-    .wrapper
-      .table__content(:style="{transform: `translateX(${animatedPosition}%)`}")
-        .column(
-          v-for="(chapter, index) in getCurrentTechnology.chapters"
-          :key="index"
         )
-          .column__title
-            span {{chapter.title}}
-            .actions
-              i(
-                class="el-icon-delete"
-                @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить раздел?', actionOK: 'content/removeChapter', actionOKPayload: {_id: chapter._id}})"
-              )
-          .column__page(
-            v-for="page in chapter.pages"
-          )
-            nuxt-link(:to="`PageEditor/${page._id}`") {{page.title}}
-            .actions
-              i(
-                class="el-icon-delete"
-                @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить страницу?', actionOK: 'content/removePage', actionOKPayload: {_id: page._id}})"
-                )
-          .column__page-creator
-            nuxt-link.btn(:to="`PageCreator/${chapter._id}`") Создать страницу
-        .table__chapter-creator
-          .creator(v-if="isCreateChapter === stateOption.modification")
-            .creator__enter.el-icon-circle-close(@click="closeCreateChapter")
-            input.creator__field(placeholder="Название раздела" v-model="chapterTitle")
-            .creator__enter.el-icon-circle-check(@click="createChapter({technologyID: getCurrentTechnology._id, title: chapterTitle})")
-          .creator
-            .el-icon-loading(v-if="isCreateChapter === stateOption.loading")
-          button.btn(
-            @click="isCreateChapter = stateOption.modification"
-            v-if="isCreateChapter === stateOption.default"
-            ) Создать раздел
-    .table__navigation
-      .box
+      .navigation__next(@click="next")
         i(
-          @click="next"
           class="el-icon-arrow-right"
           :class="{'active': !isEnd}"
+        )
+    .table(v-if="getCurrentTechnology")
+      .table__navigation
+        .box
+          i(
+            @click="previous"
+            class="el-icon-arrow-left"
+            :class="{'active': !isStart}"
+            )
+      .wrapper
+        .table__content(:style="{transform: `translateX(${animatedPosition}%)`}")
+          .column(
+            v-for="(chapter, index) in getCurrentTechnology.chapters"
+            :key="index"
           )
+            .column__title
+              span {{chapter.title}}
+              .actions
+                i(
+                  class="el-icon-delete"
+                  @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить раздел?', actionOK: 'content/removeChapter', actionOKPayload: {_id: chapter._id}})"
+                )
+            .column__page(
+              v-for="page in chapter.pages"
+            )
+              nuxt-link(:to="`PageEditor/${page._id}`") {{page.title}}
+              .actions
+                i(
+                  class="el-icon-delete"
+                  @click="openDialog({type: 'confirmation', message: 'Вы действительно хотите удалить страницу?', actionOK: 'content/removePage', actionOKPayload: {_id: page._id}})"
+                  )
+            .column__page-creator
+              nuxt-link.btn(:to="`PageCreator/${chapter._id}`") Создать страницу
+          .table__chapter-creator
+            .creator(v-if="isCreateChapter === stateOption.modification")
+              .creator__enter.el-icon-circle-close(@click="closeCreateChapter")
+              input.creator__field(placeholder="Название раздела" v-model="chapterTitle")
+              .creator__enter.el-icon-circle-check(@click="createChapter({technologyID: getCurrentTechnology._id, title: chapterTitle})")
+            .creator
+              .el-icon-loading(v-if="isCreateChapter === stateOption.loading")
+            button.btn(
+              @click="isCreateChapter = stateOption.modification"
+              v-if="isCreateChapter === stateOption.default"
+              ) Создать раздел
+      .table__navigation
+        .box
+          i(
+            @click="next"
+            class="el-icon-arrow-right"
+            :class="{'active': !isEnd}"
+            )
 </template>
 
 <script>
@@ -58,7 +70,6 @@
     },
     data() {
       return {
-        chapterTitleState: 'default',
         stateOption: {
           default: 'default',
           modification: 'modification',
@@ -84,12 +95,14 @@
         this.$store.dispatch('content/removePage', {_id: payload._id})
       },
       closeCreateChapter() {
+        this.chapterTitle = '';
         this.isCreateChapter = this.stateOption.default;
       },
       async createChapter(payload) {
         if (payload.title) {
           this.isCreateChapter = this.stateOption.loading;
           await this.$store.dispatch('content/createChapter', {technologyID: payload.technologyID, title: payload.title});
+          this.chapterTitle = '';
           this.isCreateChapter = this.stateOption.default;
         }
       },
@@ -130,16 +143,13 @@
         return this.tweenedPosition * this.getCoefficientTranslate;
       },
       getCoefficientTranslate() {
-        if (this.getCoefficientAdaptive === 6 || this.getCoefficientAdaptive === 5) {
+        if (this.getCoefficientAdaptive === 6) {
           this.coefficientTranslate = 33.5;
           this.countChaptersDisplayed = 3;
-        } else if(this.getCoefficientAdaptive === 4) {
+        } else if(this.getCoefficientAdaptive === 4 || this.getCoefficientAdaptive === 5) {
           this.coefficientTranslate = 50;
           this.countChaptersDisplayed = 2;
-        } else if(this.getCoefficientAdaptive === 3) {
-          this.coefficientTranslate = 50;
-          this.countChaptersDisplayed = 2;
-        } else if (this.getCoefficientAdaptive === 2 || this.getCoefficientAdaptive === 1) {
+        } else if (this.getCoefficientAdaptive === 3 || this.getCoefficientAdaptive === 2 || this.getCoefficientAdaptive === 1) {
           this.coefficientTranslate = 100;
           this.countChaptersDisplayed = 1;
         }
@@ -159,7 +169,7 @@
       getCurrentTechnologyID: function() {
         this.position = 0;
         this.tweenedPosition = 0;
-        this.isCreateChapter = false;
+        this.isCreateChapter = this.stateOption.default;
         this.chapterTitle = '';
       }
     }
@@ -167,6 +177,21 @@
 </script>
 
 <style lang="scss" scoped>
+  .navigation {
+    display: none;
+    justify-content: space-between;
+    &__previos, &__next {
+      width: 48%;
+      background-color: #fff;
+      padding: .5em;
+      text-align: center;
+      border-radius: 5px;
+      .active {
+        font-weight: 700;
+        color: #050619;
+      }
+    }
+  }
   .table {
     display: flex;
     justify-content: space-between;
@@ -179,11 +204,11 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
       }
       i {
-        position: fixed;
-        padding: 2em 0;
+        margin: .2em;
+        padding: .5em;
         align-self: center;
         color: #a2a2a2;
         font-size: 16px;
@@ -308,7 +333,7 @@
     }
   }
 
-  @media (min-width: 480px) and (max-width: 991px) {
+  @media (min-width: 768px) and (max-width: 1279px) {
     .table {
       &__content {
         .column {
@@ -318,41 +343,36 @@
       &__chapter-creator {
         min-width: 50%;
       }
+      .creator__field {
+        width: 50%;
+      }
     }
   }
 
-  @media (max-width: 479px) {
+
+  @media (max-width: 767px) {
     .table {
       &__content {
         .column {
           min-width: 100%;
-          &__title, &__page {
-            flex-direction: column;
-            background-color: #f2f2f2;
-            border-radius: .5em;
-            margin: 0 .5em .5em;
-            span {
-              text-align: center;
-              margin-bottom: .5em;
-              padding-right: 0;
-            }
-            .actions {
-              margin: 0 .5em;
-              border-radius: 1em;
-              border: 1px solid #cecece;
-              i {
-                padding: 3px;
-                width: 50%;
-                text-align: center;
-
-              }
-            }
-          }
         }
       }
       &__chapter-creator {
         min-width: 100%;
-        justify-content: center;
+      }
+    }
+  }
+
+  @media (max-width: 479px) {
+    .navigation {
+      display: flex;
+    }
+    .table {
+      &__navigation {
+        display: none;
+      }
+      .table__content .column__page, .column__title {
+        margin: 0;
       }
     }
   }
