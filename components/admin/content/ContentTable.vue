@@ -364,6 +364,11 @@
   }
 
   @media (max-width: 479px) {
+    .table {
+      .wrapper {
+        min-width: 100%;
+      }
+    }
     .navigation {
       display: flex;
     }
