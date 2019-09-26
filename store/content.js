@@ -26,18 +26,21 @@ export const mutations = {
     state.currentTechnology = null
   },
   markPages(state) {
-    const userPages = this.getters['auth/currentUser'].pages;
+    const user = this.getters['auth/currentUser'];
+    if (user) {
+      const userPages = user.pages;
 
-    let checkInUserPages = function(id) {
-     let search = userPages.find(item => item._id === id);
-     return !!search;
-    };
+      let checkInUserPages = function(id) {
+        let search = userPages.find(item => item._id === id);
+        return !!search;
+      };
 
-    state.currentTechnology.chapters.forEach((chapter) => {
-     chapter.pages.forEach(page => {
-       page.isMarked = checkInUserPages(page._id);
-     });
-    });
+      state.currentTechnology.chapters.forEach((chapter) => {
+        chapter.pages.forEach(page => {
+          page.isMarked = checkInUserPages(page._id);
+        });
+      });
+    }
   },
   setTechnologyList(state, payload) {
     state.technologyList = payload.technologyList
