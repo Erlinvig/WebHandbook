@@ -2,7 +2,11 @@
   .container(v-if="page")
     .title.mt1.mb1
       h1 {{title}}
-      button(@click="markPage" :class="{'marked': isMarked}")
+      button(
+        @click="markPage"
+        :class="{'marked': isMarked}"
+        v-if="user"
+        )
         span.el-icon-loading(v-if="isMarkState === stateOption.loading")
         i.el-icon-circle-check(v-if="isMarkState === stateOption.default")
         span(v-if="isMarkState === stateOption.default") Изучено
@@ -53,6 +57,9 @@
       },
     },
     computed: {
+      user() {
+        return this.$store.getters['auth/currentUser']
+      },
       options() {
         return {
           savedTitle: this.page.title,
