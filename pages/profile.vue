@@ -275,6 +275,8 @@
       }
       &__btn {
         width: 20%;
+        display: flex;
+        justify-content: center;
       }
     }
 

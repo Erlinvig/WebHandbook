@@ -178,29 +178,10 @@
     .no-content {
       background: #dcdcdc;
       text-align: center;
-      font-size: 18px;
+      font-size: 15px;
       padding: 1em;
     }
   }
-
-  /*.fade-enter-active {*/
-  /*  animation: fade .5s;*/
-  /*}*/
-  /*.fade-leave-active {*/
-  /*  animation: fade .5s reverse;*/
-  /*}*/
-
-  /*@keyframes fade {*/
-  /*  0% {*/
-  /*    transform: scale(0);*/
-  /*    padding: 0;*/
-  /*  }*/
-  /*  100% {*/
-  /*    transform: scale(1);*/
-  /*    padding: 1em;*/
-  /*  }*/
-  /*}*/
-
 
   @media (min-width: 1280px) {
     .row__item {
