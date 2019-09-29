@@ -1,6 +1,6 @@
 # WebHandbook
 
-> My delightful Nuxt.js project
+> Heroku: https://webhandbook.herokuapp.com
 
 ## Build Setup
 
