@@ -64,7 +64,12 @@
     },
     methods: {
       openSettingTechnology(payload) {
-        this.$store.dispatch('dialog/open', {type: 'technology-setting', ...payload});
+        const user = this.$store.getters['auth/currentUser'];
+        this.$store.dispatch('content/guestNotification', { user });
+
+        if (user.status === 'admin') {
+          this.$store.dispatch('dialog/open', {type: 'technology-setting', ...payload});
+        }
       },
       prepareCreateTechnology() {
         if (this.newTechnologyState === this.newTechnologyStateOption.default) {
@@ -80,10 +85,15 @@
       },
       async createTechnology(payload) {
         if (payload.title) {
-          this.newTechnologyState = this.newTechnologyStateOption.loading;
-          await this.$store.dispatch('content/createTechnology', {title: payload.title});
-          this.newTechnologyState = this.newTechnologyStateOption.default;
-          this.newTechnologyTitle = '';
+          const user = this.$store.getters['auth/currentUser'];
+          this.$store.dispatch('content/guestNotification', { user });
+
+          if (user.status === 'admin') {
+            this.newTechnologyState = this.newTechnologyStateOption.loading;
+            await this.$store.dispatch('content/createTechnology', {title: payload.title});
+            this.newTechnologyState = this.newTechnologyStateOption.default;
+            this.newTechnologyTitle = '';
+          }
         }
       },
       setActiveTechnologyID(id) {

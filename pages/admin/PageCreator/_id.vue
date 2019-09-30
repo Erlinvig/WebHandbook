@@ -53,13 +53,17 @@
 
         const isFilled = pageData.title && pageData.content;
 
+
         if (!isFilled) {
           this.error = 'Все поля должны быть заполены!';
         }
-
         else {
           this.error = null;
-          if (this.stateSave === this.stateOption.default) {
+
+          const user = this.$store.getters['auth/currentUser'];
+          this.$store.dispatch('content/guestNotification', { user });
+
+          if (this.stateSave === this.stateOption.default && user.status === 'admin') {
             this.stateSave = this.stateOption.loading;
             await this.$store.dispatch('content/createPage', pageData);
             this.$router.push('/admin/content')

@@ -89,7 +89,12 @@
         this.$router.push(`PageCreator/${chapterID}`)
       },
       openDialog(payload) {
-        this.$store.dispatch('dialog/open', payload)
+        const user = this.$store.getters['auth/currentUser'];
+        this.$store.dispatch('content/guestNotification', { user });
+
+        if (user.status === 'admin') {
+          this.$store.dispatch('dialog/open', payload)
+        }
       },
       removePage(payload) {
         this.$store.dispatch('content/removePage', {_id: payload._id})
@@ -100,10 +105,15 @@
       },
       async createChapter(payload) {
         if (payload.title) {
-          this.isCreateChapter = this.stateOption.loading;
-          await this.$store.dispatch('content/createChapter', {technologyID: payload.technologyID, title: payload.title});
-          this.chapterTitle = '';
-          this.isCreateChapter = this.stateOption.default;
+          const user = this.$store.getters['auth/currentUser'];
+          this.$store.dispatch('content/guestNotification', { user });
+
+          if (user.status === 'admin') {
+            this.isCreateChapter = this.stateOption.loading;
+            await this.$store.dispatch('content/createChapter', {technologyID: payload.technologyID, title: payload.title});
+            this.chapterTitle = '';
+            this.isCreateChapter = this.stateOption.default;
+          }
         }
       },
       removeChapter(payload) {

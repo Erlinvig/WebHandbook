@@ -72,7 +72,11 @@
         }
         else {
          this.error = null;
-         if (this.stateUpdate === this.stateOption.default || this.stateUpdate === this.stateOption.success) {
+          const user = this.$store.getters['auth/currentUser'];
+          this.$store.dispatch('content/guestNotification', { user });
+
+         if ((this.stateUpdate === this.stateOption.default || this.stateUpdate === this.stateOption.success)
+              && user.status === 'admin') {
            this.stateUpdate = this.stateOption.loading;
            await this.$store.dispatch('content/updatePage', pageData);
            this.stateUpdate = this.stateOption.success;

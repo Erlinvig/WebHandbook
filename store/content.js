@@ -168,6 +168,15 @@ export const actions = {
 
   closeChapter({commit}, payload) {
     commit('closeChapter', payload)
+  },
+
+  guestNotification({commit, dispatch, getters}, payload) {
+    if (payload.user.status === 'guest') {
+      dispatch('dialog/open', {
+        type: 'notification',
+        message: 'Действие невозможно, так как вы находитесь в гостевом режиме!'
+      }, { root: 'dialog' });
+    }
   }
 };
 
